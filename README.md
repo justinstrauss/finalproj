@@ -14,7 +14,7 @@ Javascript
 API
 
 ## Contributors
-Lev Akabas  
+Lev Akabas(https://github.com/levakabas)  
 Dennis Nenov  
 Justin Strauss  
 Derek Tsui  
