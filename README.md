@@ -22,4 +22,6 @@ API
 Positions: Code Reviewer, Project Manager, Front End, Back End, Analytics, etc.
 
 ## Timeline
-12/19: finalize idea
+- [X] 12/19: finalize project idea
+- [ ] 12/21: get login with Facebook working
+- [ ] 
