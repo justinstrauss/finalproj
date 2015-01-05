@@ -29,7 +29,7 @@ API
 
 ## Contributors
 [Lev Akabas](https://github.com/levakabas): Analytics  
-[Dennis Nenov](https://github.com/DennisNenov): Code Review
+[Dennis Nenov](https://github.com/DennisNenov): Code Review  
 [Justin Strauss](https://github.com/justinstrauss): Project Deadline/Issues Manager   
 [Derek Tsui](https://github.com/d-tsui): Front End  
 
