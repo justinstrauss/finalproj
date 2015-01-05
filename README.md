@@ -29,7 +29,7 @@ API
 
 ## Contributors
 [Lev Akabas](https://github.com/levakabas): Analytics  
-[Dennis Nenov](https://github.com/DennisNenov): Code Review
+[Dennis Nenov](https://github.com/DennisNenov): Code / Backend / Creative Director
 [Justin Strauss](https://github.com/justinstrauss): Project Deadline/Issues Manager   
 [Derek Tsui](https://github.com/d-tsui): Front End  
 
@@ -41,4 +41,4 @@ Positions: Code Reviewer, Project Manager, Front End, Back End, Analytics, etc.
 - [ ] 12/25: integrate Yelp API (Lev)
 - [ ] 12/27: finish basic front end UI (Derek)
 - [ ] 12/29: integrate directions - Google Maps walking transit biking drive, Citibike, Uber (Justin, Derek)
-- [ ] 1/16: fin
+- [ ] 1/20: fin
