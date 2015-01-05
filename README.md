@@ -41,4 +41,4 @@ Positions: Code Reviewer, Project Manager, Front End, Back End, Analytics, etc.
 - [ ] 12/25: integrate Yelp API (Lev)
 - [ ] 12/27: finish basic front end UI (Derek)
 - [ ] 12/29: integrate directions - Google Maps walking transit biking drive, Citibike, Uber (Justin, Derek)
-- [ ] 1/16: fin
+- [ ] 1/20: fin
