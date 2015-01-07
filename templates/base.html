@@ -5,13 +5,41 @@
 	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
 </head>
 
+<body>
+<script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '935483263159079',
+          xfbml      : true,
+          version    : 'v2.1'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 <div class="pure-menu pure-menu-open pure-menu-horizontal">
-    <a href="/" class="pure-menu-heading">Yelp with Friends</a>
+    <a href="/" class="pure-menu-heading">Chill with Friends</a>
 
     <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/login">Login with Facebook</a></li>
+        <li><a href="/create">Create New Chill</a></li>
+        <li class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true"></li>
     </ul>
 </div>
 
@@ -31,3 +59,4 @@
 <hr>
 <br>
 </div>
+</body>
