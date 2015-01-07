@@ -38,6 +38,7 @@ Positions: Code Reviewer, Project Manager, Front End, Back End, Analytics, etc.
 ## Timeline
 - [X] 12/19: finalize project idea (all)
 - [X] 1/5: get login with Facebook working (Justin --> fixed by Derek)
+- [X] 1/6: deploy Digital Ocean droplet (Justin)
 - [ ] 1/7: integrate Yelp API (Lev)
 - [ ] 1/9: finish basic front end UI (Derek)
 - [ ] 1/11: integrate directions - Google Maps walking transit biking drive, Citibike, Uber (Justin, Derek)
