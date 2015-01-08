@@ -7,12 +7,27 @@ import urllib2, json, urllib
 
 app = Flask(__name__)
 
+def login_required(f):
+    @wraps(f)
+    def inner(*args, **kwargs):
+        if session["name"]==None:
+            flash("You must login to access this protected page!")
+            session['nextpage'] = request.url
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return inner
+
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template("index.html")
 
+@app.route('/account')
+def account():
+    return render_template("account.html")
+
 @app.route('/create')
+#@login_required
 def create():
 	return render_template("create.html")
 
