@@ -1,6 +1,7 @@
 Software Development Fall Term Final Project
 ## conven.io
 =========
+Yelp! with Facebook friends
 
 ## About
 
