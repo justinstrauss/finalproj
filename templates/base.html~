@@ -75,7 +75,7 @@ FB.logout(function(response) { });
 }(document, 'script', 'facebook-jssdk'));</script>
 
 <div class="pure-menu pure-menu-open pure-menu-horizontal">
-    <a href="/" class="pure-menu-heading">Conven.io</a>
+    <a href="/" class="pure-menu-heading">Chill with Friends</a>
 
     <ul>
         <li><a href="/">Home</a></li>

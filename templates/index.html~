@@ -1,7 +1,7 @@
 {% extends "base.html" %}
   {% block bodycontent %}
 
-Welcome to Conven.io
+Welcome to Chill with Friends
 by Justin, Derek, Dennis, and Lev
 
 <div id="demo">
