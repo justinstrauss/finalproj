@@ -2,6 +2,7 @@
 # Software Development Period 7
 # Final Project
 
+import db
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 import urllib2, json, urllib
 
@@ -32,6 +33,7 @@ def create():
 	return render_template("create.html")
 
 if __name__ == '__main__':
+        db.setup()
 	app.secret_key = "don't store this on github"
 	app.debug = True
 	app.run(host='0.0.0.0')

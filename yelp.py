@@ -1,3 +1,7 @@
+# Justin Strauss, Lev Akabas, Derek Tsui, Dennis Nenov
+# Software Development Period 7
+# Final Project
+
 import oauth2
 import json
 import urllib
