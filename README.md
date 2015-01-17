@@ -1,7 +1,8 @@
 Software Development Fall Term Final Project
-## conven.io
 =========
-Yelp! with Facebook friends
+## conven.io
+
+
 
 ## About
 
@@ -21,21 +22,27 @@ Features:
 
 ## How to Install
 
+1. open up a terminal and type `$git clone git@github.com:justinstrauss/finalproj.git`
+2. create a virtual environment (optional) and type `$pip install flask`
+3. type `$python app.py` to run the app
+4. go to [localhost:5000](localhost:5000) in your browser (Chrome is recommended)
+
 ## Tools Utilized
 
-Python
-Pure CSS
-Flask
-Javascript
-API
+- [Python](https://www.python.org/) and [Flask](http://flask.pocoo.org/) for basic app backbone  
+- [Twitter Bootstrap](http://getbootstrap.com/) for CSS styling  
+- [Digital Ocean](https://www.digitalocean.com/) for droplet deployment  
+- [Facebook Graph API](https://developers.facebook.com/docs/graph-api) for connecting with friends  
+- [Yelp API](http://www.yelp.com/developers/documentation)  
+- [Google Maps API](https://developers.google.com/maps/) for directions and geolocation  
+- [JQuery](http://jquery.com/)  
+- [SQLite](http://www.sqlite.org/) for database storage
 
 ## Contributors
-[Lev Akabas](https://github.com/levakabas): Analytics  
-[Dennis Nenov](https://github.com/DennisNenov): Code / Backend / Creative Director  
-[Justin Strauss](https://github.com/justinstrauss): Project Deadline/Issues Manager   
-[Derek Tsui](https://github.com/d-tsui): Front End  
-
-Positions: Code Reviewer, Project Manager, Front End, Back End, Analytics, etc.
+[Lev Akabas](https://github.com/levakabas): Analytics, Back End  
+[Dennis Nenov](https://github.com/DennisNenov): Code Reviewer, Workflow  
+[Justin Strauss](https://github.com/justinstrauss): Project Manager, Back End  
+[Derek Tsui](https://github.com/d-tsui): Front End, Styling  
 
 ## Timeline
 - [X] 12/19: finalize project idea (all)
