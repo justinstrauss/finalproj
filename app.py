@@ -8,6 +8,8 @@ import urllib2, json, urllib
 
 app = Flask(__name__)
 
+secrets = json.load(open("secrets.json"))
+
 def login_required(f):
     @wraps(f)
     def inner(*args, **kwargs):
@@ -22,6 +24,38 @@ def login_required(f):
 @app.route('/index')
 def index():
     return render_template("index.html")
+
+@app.route('/login')
+def login():
+    url="https://www.facebook.com/dialog/oauth"
+    data = urllib.urlencode(secrets['request_redirect'])
+    req = urllib2.Request(url+"?"+data)
+    response = urllib2.urlopen(req)
+    result = response.read()
+    return result
+
+@app.route("/oauth2callback")
+def oauth2callback():
+    if request.args.has_key('error'):
+        return "ERROR"
+
+    url = "https://www.facebook.com/connect/login_success.html"
+    code = request.args.get('code')
+    values = secrets['request_token']
+    values['code'] = code
+
+    data = urllib.urlencode(values)
+    req = urllib2.Request(url,data)
+    response = urllib2.urlopen(req)
+    rawresult = response.read()
+    d = json.loads(rawresult)
+    url = "https://www.googleapis.com/oauth2/v1/tokeninfo?id_token=%s"%(d['id_token'])
+    req = urllib2.Request(url)
+    response = urllib2.urlopen(req)
+    rawresult = response.read()
+    d = json.loads(rawresult)
+    session['user']=d['email']
+    return redirect("/")
 
 @app.route('/account')
 def account():
