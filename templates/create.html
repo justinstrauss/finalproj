@@ -1,43 +1,68 @@
 {% extends "base.html" %}
   {% block bodycontent %}
-<h1> Welcome </h1>
+<h1> Create a Convenio </h1>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "#dateEntry" ).datepicker();
+  });
+  </script>
+
+
 <form>
+
   <div class="form-group">
     <label for="friendList">List the friends you want to invite:</label>
     <input type="text" class="form-control" id="friendList" placeholder="Enter friends">
     <p class="help-block">Seperate names with a comma</p>
   </div>
+
   <div class="form-group">
-    <label for="friendList">Enter your location:</label>
-    <input type="text" class="form-control" id="friendList" placeholder="Enter friends">
-    <p class="help-block">Seperate names with a comma</p>
+    <label for="locationEntry">Enter your location:</label>
+    <input type="text" class="form-control" id="locationEntry" placeholder="Enter location">
   </div>
+
   <div class="form-group">
-    <label for="friendList">List the friends you want to invite:</label>
-    <input type="text" class="form-control" id="friendList" placeholder="Enter friends">
-    <p class="help-block">Seperate names with a comma</p>
+    <label for="activityEntry">What do you want to do:</label>
+    <input type="text" class="form-control" id="activityEntry" placeholder="Enter activity">
+  </div>
+
+  <div class="form-group">
+    <label for="activityEntry">When do you want to do this:</label>
+    <input type="text" class="form-control" id="dateEntry" placeholder="Enter date">
+  </div>
+
+  <label>How will you get there:</label>
+  <BR>
+  <div class="btn-group" role="group" aria-label="...">
+    <button type="submit" id="walkButton" class="btn btn-default">Walk</button>
+    <button type="submit" id="carButton" class="btn btn-default">Car</button>
+    <button type="submit" id="transportButton" class="btn btn-default">Public Transportation</button>
   </div>
   
-  <button type="submit" class="btn btn-default">Submit</button>
 </form>
 
 <script>
-var x = document.getElementById("");
+var x = document.getElementById("locationEntry");
 function getLocation() {
 if (navigator.geolocation) {
 navigator.geolocation.getCurrentPosition(showPosition);
 } else {
-x.innerHTML = "Geolocation is not supported by this browser.";
+x.value = "Enter your location manually.";
 }
 }
 function showPosition(position) {
 var latlon = position.coords.latitude + "," + position.coords.longitude;
-var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
-document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+x.value = latlon;
 }
 getLocation();
 </script>
 
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 
 </body>
 
