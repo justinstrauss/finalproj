@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+  {% block bodycontent %}
+<body>
+
+<h2> Who: </h2>
+
+Please select the Facebook friends you want to invite to your chill:
+
+<h2> What: </h2>
+
+What do you want to do during your chill?
+
+<h2> Where: </h2>
+
+[insert Yelp API stuff here]
+
+<h2> When: </h2>
+
+
+
+<h2> How: </h2>
+
+How do you want to get to your chill? (Public transportation, walking, driving, cycling, Uber, Citibike)
+
+</body>
+
+
+
+
+  {% endblock bodycontent %}
