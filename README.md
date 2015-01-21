@@ -51,4 +51,5 @@ Features:
 - [X] 1/15: finish basic front end UI (Derek)
 - [X] 1/17: layout "create new chill" form (Dennis)
 - [ ] 1/19: integrate directions - Google Maps walking transit biking drive, Citibike, Uber (Justin, Derek)
-- [ ] 1/23: fin
+- [ ] 1/25: complete front page integration
+- [ ] 1/27: fin
