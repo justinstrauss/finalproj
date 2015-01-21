@@ -6,7 +6,12 @@
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.4.13/jquery.timepicker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.4.13/jquery.timepicker.min.js"></script>
   <script>
+  $(function() {
+    $('#timeEntry').timepicker();
+  });
   $(function() {
     $( "#dateEntry" ).datepicker();
   });
@@ -33,7 +38,10 @@
 
   <div class="form-group">
     <label for="activityEntry">When do you want to do this:</label>
+    <p class="help-block">Enter date</p>
     <input type="text" class="form-control" id="dateEntry" placeholder="Enter date">
+    <p class="help-block">Enter time</p>
+    <input type="text" class="form-control" id="timeEntry" placeholder="Enter time">
   </div>
 
   <label>How will you get there:</label>
