@@ -5,10 +5,9 @@
 import db
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 import urllib2, json, urllib
+import yelp
 
 app = Flask(__name__)
-
-secrets = json.load(open("secrets.json"))
 
 def login_required(f):
     @wraps(f)
@@ -25,46 +24,28 @@ def login_required(f):
 def index():
     return render_template("index.html")
 
-@app.route('/login')
-def login():
-    url="https://www.facebook.com/dialog/oauth"
-    data = urllib.urlencode(secrets['request_redirect'])
-    req = urllib2.Request(url+"?"+data)
-    response = urllib2.urlopen(req)
-    result = response.read()
-    return result
-
-@app.route("/oauth2callback")
-def oauth2callback():
-    if request.args.has_key('error'):
-        return "ERROR"
-
-    url = "https://www.facebook.com/connect/login_success.html"
-    code = request.args.get('code')
-    values = secrets['request_token']
-    values['code'] = code
-
-    data = urllib.urlencode(values)
-    req = urllib2.Request(url,data)
-    response = urllib2.urlopen(req)
-    rawresult = response.read()
-    d = json.loads(rawresult)
-    url = "https://www.googleapis.com/oauth2/v1/tokeninfo?id_token=%s"%(d['id_token'])
-    req = urllib2.Request(url)
-    response = urllib2.urlopen(req)
-    rawresult = response.read()
-    d = json.loads(rawresult)
-    session['user']=d['email']
-    return redirect("/")
-
 @app.route('/account')
 def account():
     return render_template("account.html")
 
-@app.route('/create')
+@app.route('/create', methods=['GET','POST'])
 #@login_required
 def create():
-	return render_template("create.html")
+    if request.method=='GET':
+        return render_template("create.html")
+    search = request.form['activityEntry']
+    cll = request.form['locationEntry']
+    print cll
+    session['search'] = search
+    session['cll'] = cll
+    if (cll == None or search == None):
+        return render_template("index.html")
+    else:
+        return redirect(url_for('results'))
+
+@app.route('/results')
+def results():
+    return yelp.search(session.pop('search',None),session.pop('cll',None))
 
 if __name__ == '__main__':
         db.setup()
