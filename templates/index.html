@@ -1,8 +1,10 @@
 {% extends "base.html" %}
   {% block bodycontent %}
 
-Welcome to Conven.io
-by Justin, Derek, Dennis, and Lev
+Welcome to Conven.io <br>
+by Justin, Derek, Dennis, and Lev <br>
+
+Logged in as id={{id}} name={{name}} token={{token}} <br><br>
 
 <div id="demo">
 
@@ -11,5 +13,24 @@ by Justin, Derek, Dennis, and Lev
 <div id="mapholder">
 
 </div>
+
+<script>
+var x = document.getElementById("demo");
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
+
+    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+}
+getLocation();
+</script>
 
   {% endblock bodycontent %}
