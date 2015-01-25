@@ -13,13 +13,13 @@ def setup():
 	#default to test
 	users = []
 	#[name,id]
-	users.append(["Justin Strauss","100001767295555"])
-	users.append(["Lev Akabas","100001958141644"])
-	users.append(["Dennis Nenov","100000550963490"])
+	users.append(["Justin Strauss","100001767295555","justinianstrauss@gmail.com"])
+	users.append(["Lev Akabas","100001958141644","lakabas15@gmail.com"])
+	users.append(["Dennis Nenov","100000550963490", "nycdennen@gmail.com"])
 
 	dlist = []
 	for i in range(len(users)):
-		d = {'name':users[i][0],'id':users[i][1]}
+		d = {'name':users[i][0],'id':users[i][1], 'email':users[i][2]}
 		dlist.append(d)
 
 	db.convenio.insert(dlist)

@@ -48,9 +48,11 @@ def index():
         session["name"] = None
     if "id" not in session:
         session['id'] = None
+    if "email" not in session:
+        session["email"] = None
     if "token" not in session:
         session["token"] = None
-    return render_template("index.html", name=session['name'], id=session['id'], token=session['token'])
+    return render_template("index.html", name=session['name'], id=session['id'], email=session["email"], token=session['token'])
 
 @app.route('/login')
 def login():
@@ -69,9 +71,10 @@ def facebook_authorized(resp):
     me = facebook.get('/me')
     session['name'] = me.data['name']
     session['id'] = me.data['id']
+    session['email'] = me.data['email']
     session['token'] = (resp['access_token'])
     if not db.userexists(session['id']):
-        db.adduser(session['name'],session['id'])
+        db.adduser(session['name'],session['id'],session['email'])
     return redirect(url_for('index'))
 
 @facebook.tokengetter
@@ -83,6 +86,7 @@ def logout():
     session.pop('name', None)
     session.pop('id', None)
     session.pop('token', None)
+    session.pop('email', None)
     return redirect(url_for('index'))
 
 @app.route('/account')
@@ -92,21 +96,39 @@ def account():
 @app.route('/create', methods=['GET','POST'])
 #@login_required
 def create():
-    if request.method=='GET':
-        return render_template("create.html")
-    search = request.form['activityEntry']
-    cll = request.form['locationEntry']
-    print cll
-    session['search'] = search
-    session['cll'] = cll
-    if (cll == None or search == None):
-        return render_template("index.html")
-    else:
-        return redirect(url_for('results'))
+    # if request.method=='GET':
+        fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=%s" % (session["token"])
+        request = urllib2.urlopen(fburl)
+        result = request.read()
+        d = json.loads(result)
+        # a = open('sample.json').read()
+        # d = json.loads(a)
+        friendslist = d['data']
+        friends = []
+        for eachfriend in friendslist:
+            friends.append(str(eachfriend["name"]))
+        # print friends
+        return render_template("create.html", friends=friends)
 
-@app.route('/results')
-def results():
-    return yelp.search(session.pop('search',None),session.pop('cll',None))
+
+# @app.route('/create', methods=['GET','POST'])
+# #@login_required
+# def create():
+#     if request.method=='GET':
+#         return render_template("create.html")
+#     search = request.form['activityEntry']
+#     cll = request.form['locationEntry']
+#     print cll
+#     session['search'] = search
+#     session['cll'] = cll
+#     if (cll == None or search == None):
+#         return render_template("index.html")
+#     else:
+#         return redirect(url_for('results'))
+
+# @app.route('/results')
+# def results():
+#     return yelp.search(session.pop('search',None),session.pop('cll',None))
 
 if __name__ == '__main__':
         db.setup()
