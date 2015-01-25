@@ -1,18 +1,107 @@
 {% extends "base.html" %}
   {% block bodycontent %}
-<h1> Create a Convenio </h1>
+<h1> Create a Chill </h1>
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
-  <script>
+
+<script>
   $(function() {
-    $( "#dateEntry" ).datepicker();
+    var availableTags = 
+    {% if friends==[] %}
+    [
+      "Justin Strauss",
+      "Lev Akabas",
+      "Dennis Nenov"
+    ];
+    {% else %}
+      {{friends}};
+    {% endif %}
+    function split( val ) {
+      return val.split( /,\s*/ );
+    }
+    function extractLast( term ) {
+      return split( term ).pop();
+    }
+ 
+    $( "#who" )
+      // don't navigate away from the field on tab when selecting an item
+      .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).autocomplete( "instance" ).menu.active ) {
+          event.preventDefault();
+        }
+      })
+      .autocomplete({
+        minLength: 0,
+        source: function( request, response ) {
+          // delegate back to autocomplete, but extract the last term
+          response( $.ui.autocomplete.filter(
+            availableTags, extractLast( request.term ) ) );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = split( this.value );
+          // remove the current input
+          terms.pop();
+          // add the selected item
+          terms.push( ui.item.value );
+          // add placeholder to get the comma-and-space at the end
+          terms.push( "" );
+          this.value = terms.join( ", " );
+          return false;
+        }
+      });
   });
   </script>
 
-<div style="align:center;width:80%">
+  <script>
+  $(function() {
+    $( "#date" ).datepicker();
+  });
+  </script>
+
+<form class="pure-form pure-form-aligned" method="POST">
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="who">WHO do you want to invite? </label>
+            <input id="who" type="text" placeholder="select from Facebook friends" name="who">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="what">WHAT type of food do you prefer? </label>
+            <input id="what" type="text" placeholder="default set to preferences, type in other food if desired" name="what">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="where">WHERE do you want to meet? </label>
+            <input id="password" type="text" placeholder="default set to current location, type in other location if desired" name="where">
+        </div>
+
+    <div class="pure-control-group">
+            <label for="when">WHEN do you want to meet? </label>
+            <input id="date" type="text" placeholder="select a date" name="date">
+            <input id="thetime" type="text" placeholder="select a time" name="thetime">
+        </div>
+
+        <div class="pure-controls">
+            <button type="submit" name="b" value="Register" class="pure-button pure-button-primary">Register</button>
+        <button type="submit" name="b" value="Clear" class="pure-button pure-button-secondary">Clear</button>
+        </div>
+    </fieldset>
+</form>
+
+  <script>
+  $(function() {
+    $( "#thetime" ).timepicker({ 'scrollDefault': 'now' });
+  });
+  </script>
+
 <form method="POST">
 
   <div class="form-group">
@@ -61,10 +150,5 @@ x.value = latlon;
 }
 getLocation();
 </script>
-</div>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
-
-</body>
-
 
   {% endblock bodycontent %}
