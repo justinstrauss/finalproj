@@ -1,26 +1,71 @@
-import urllib2, json
-##FACEBOOK API KEY
+from flask import Flask, redirect, url_for, session, request
+from flask_oauth import OAuth
+
+
+SECRET_KEY = 'development key'
+DEBUG = True
+FACEBOOK_APP_ID = '188477911223606'
+FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
 client_id = "935483263159079"
 client_secret = "ce39cb172d25891be741905badf002e9"
-access_token  = "935483263159079|7EyHz4GRI92YiJxik2E-91MuW1o"
 
-def get_uname(user_id):
-    url = "https://graph.facebook.com/%s"%(user_id)
-    request = urllib2.urlopen(url)
-    result = request.read()
-    d = json.loads(result) #dictionary of our results
-    print d["username"]
 
-def fb_profile():
-    url = "http://graph.facebook.com/%s/accounts?key=value&"
-    request = urllib2.urlopen(url)
-    result = request.read()
-    d = json.loads(result) #dictionary of our results
-    #print d["username"]
-    execTime = d['executionTime'] #gets the time when program was run, keeping here in case we want to use that somewhere!.
-    rlist = d['stationBeanList']
-    return rlist
-#given a specific location, will return the dictionary entry to the nearest citibike station
-    
+app = Flask(__name__)
+app.debug = DEBUG
+app.secret_key = SECRET_KEY
+oauth = OAuth()
+
+facebook = oauth.remote_app('facebook',
+    base_url='https://graph.facebook.com/',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    authorize_url='https://www.facebook.com/dialog/oauth',
+    consumer_key=FACEBOOK_APP_ID,
+    consumer_secret=FACEBOOK_APP_SECRET,
+    request_token_params={'scope': 'email'}
+)
+
+
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
+
+@app.route('/login')
+def login():
+    return facebook.authorize(callback=url_for('facebook_authorized',
+        next=request.args.get('next') or request.referrer or None,
+        _external=True))
+
+
+@app.route('/login/authorized')
+@facebook.authorized_handler
+def facebook_authorized(resp):
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    session['oauth_token'] = (resp['access_token'], '')
+    me = facebook.get('/me')
+    print user_likes_page
+    return 'Logged in as id=%s name=%s redirect=%s token=%s' % \
+        (me.data['id'], me.data['name'], request.args.get('next'), session['oauth_token'])
+
+
+@facebook.tokengetter
+def get_facebook_oauth_token():
+    return session.get('oauth_token')
+
+def user_likes_page():
+    url = 'https://graph.facebook.com/%d/likes/%d/' % (me.data['id'], "286286445569")
+    parameters = {'access_token': session['oauth_token']}
+    r = requests.get(url, params = parameters)
+    result = json.loads(r.text)
+    if result['data']:
+        return "yes"
+    else:
+        return "no"
+
 if __name__ == '__main__':
-    get_uname(100000550963490)
+    app.run()
