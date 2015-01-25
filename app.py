@@ -48,7 +48,7 @@ def results():
     return yelp.search(session.pop('search',None),session.pop('cll',None))
 
 if __name__ == '__main__':
-##        db.setup()
+        db.setup()
 	app.secret_key = "don't store this on github"
 	app.debug = True
 	app.run(host='0.0.0.0')
