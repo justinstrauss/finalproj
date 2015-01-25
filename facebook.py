@@ -6,6 +6,7 @@ SECRET_KEY = 'development key'
 DEBUG = True
 FACEBOOK_APP_ID = '188477911223606'
 FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
+
 client_id = "935483263159079"
 client_secret = "ce39cb172d25891be741905badf002e9"
 

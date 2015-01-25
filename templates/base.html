@@ -14,72 +14,19 @@
 </head>
 
 <body>
-<div id="fb-root"></div>
-
-<script type="text/javascript">
-
-window.fbAsyncInit = function() {
-FB.init({
-appId : '935483263159079',
-status : true,
-cookie : true,
-xfbml : true
-});
-FB.Event.subscribe('auth.login', function(response) {
-window.location = window.location;
-});
-};
-
-// Load the SDK Asynchronously
-(function(d, s, id) {
-var js, fjs = d.getElementsByTagName(s)[0];
-if (d.getElementById(id)) return;
-js = d.createElement(s); js.id = id;
-js.src = "//connect.facebook.net/en_US/all.js";
-fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-</script>
-
-<!--
-<script>
-document.getElementById('logout').onclick = function() {
-FB.logout(function(response) { });
-};
-</script>
--->
-<script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '935483263159079',
-          xfbml      : true,
-          version    : 'v2.1'
-        });
-      };
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-    </script>
-
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 <div class="pure-menu pure-menu-open pure-menu-horizontal">
-    <a href="/" class="pure-menu-heading">Conven.io</a>
+    <a href="/" class="pure-menu-heading">{% if session['name']==None %} Conven.io {% else %} Welcome {{session['name']}} {% endif %}</a>
 
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/create">Create New Chill</a></li>
         <li><a href="/account">My Account</a></li>
-        <li class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true"></li>
+        {% if session['name']==None %}
+        <li><a href="/login"><img class=="pure-img" src="{{ url_for('static', filename='fb_login.png') }}" height=20 width=60 border=0></img></a></li>
+        {% else %}
+        <li><a href="/logout"><img class=="pure-img" src="{{ url_for('static', filename='fb_logout.png') }}" height=20 width=60 border=0></img></a></li>
+        {% endif %}
     </ul>
 </div>
 

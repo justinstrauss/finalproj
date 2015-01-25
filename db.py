@@ -12,15 +12,14 @@ def setup():
 
 	#default to test
 	users = []
-	#[name,email,password]
-	users.append(["justin","justin@example.com","test"])
-	users.append(["derek","derek@example.com","test"])
-	users.append(["lev","lev@example.com","test"])
-	users.append(["dennis","dennis@example.com","test"])
+	#[name,id]
+	users.append(["Justin Strauss","100001767295555"])
+	users.append(["Lev Akabas","100001958141644"])
+	users.append(["Dennis Nenov","100000550963490"])
 
 	dlist = []
 	for i in range(len(users)):
-		d = {'name':users[i][0],'email':users[i][1],'pw':users[i][2]}
+		d = {'name':users[i][0],'id':users[i][1]}
 		dlist.append(d)
 
 	db.convenio.insert(dlist)
@@ -45,40 +44,40 @@ def setup():
 	# info = [x for x in res]
 	# print info
 
-def authenticate(username,password):
+# def authenticate(username,password):
+# 	conn = Connection()
+# 	db = conn['convenio']
+# 	return 1 == (db.convenio.find({'name':username,'pw':password})).count()
+
+def userexists(fbid):
 	conn = Connection()
 	db = conn['convenio']
-	return 1 == (db.convenio.find({'name':username,'pw':password})).count()
+	return 1 == (db.convenio.find({'id':fbid})).count()
 
-def userexists(username):
-	conn = Connection()
-	db = conn['convenio']
-	return 1 == (db.convenio.find({'name':username})).count()
+# def emailexists(email):
+# 	conn = Connection()
+# 	db = conn['convenio']
+# 	return 1 == (db.convenio.find({'email':email})).count()
 
-def emailexists(email):
-	conn = Connection()
-	db = conn['convenio']
-	return 1 == (db.convenio.find({'email':email})).count()
+# def getcontacts(username):
+# 	conn = Connection()
+# 	db = conn['convenio']
+# 	res = db.convenio.find({'name':{'$not':re.compile(username)}},{"_id":False})
+# 	info = [x for x in res]
+# 	return info
 
-def getcontacts(username):
-	conn = Connection()
-	db = conn['convenio']
-	res = db.convenio.find({'name':{'$not':re.compile(username)}},{"_id":False})
-	info = [x for x in res]
-	return info
+# def getblog(username):
+# 	conn = Connection()
+# 	db = conn['convenio_blog']
+# 	res = db.convenio_blog.find({'name':{'$not':re.compile(username)}},{"_id":False})
+# 	info = [x for x in res]
+# 	return reversed(info)
 
-def getblog(username):
-	conn = Connection()
-	db = conn['convenio_blog']
-	res = db.convenio_blog.find({'name':{'$not':re.compile(username)}},{"_id":False})
-	info = [x for x in res]
-	return reversed(info)
-
-def getblogcontent(title):
-	conn = Connection()
-	db = conn['convenio_blog']
-	res = db.convenio_blog.find({'title':title},{"_id":False})
-	return res
+# def getblogcontent(title):
+# 	conn = Connection()
+# 	db = conn['convenio_blog']
+# 	res = db.convenio_blog.find({'title':title},{"_id":False})
+# 	return res
 
 def getprofile(username):
 	conn = Connection()
@@ -87,53 +86,53 @@ def getprofile(username):
 	info = [x for x in res]
 	return info
 
-def getposts(username):
-	conn = Connection()
-	db = conn['convenio_blog']
-	res = db.convenio_blog.find({'author':username},{"_id":False})
-	info = [x for x in res]
-	return reversed(info)
+# def getposts(username):
+# 	conn = Connection()
+# 	db = conn['convenio_blog']
+# 	res = db.convenio_blog.find({'author':username},{"_id":False})
+# 	info = [x for x in res]
+# 	return reversed(info)
 
-def updatepw(username,newpw):
+# def updatepw(username,newpw):
+# 	conn = Connection()
+# 	db = conn['convenio']
+# 	db.convenio.update({'name':username},{'$set':{'pw':newpw}})
+
+def adduser(username,fbid):
 	conn = Connection()
 	db = conn['convenio']
-	db.convenio.update({'name':username},{'$set':{'pw':newpw}})
+	db.convenio.insert([{'name':username,'id':fbid}])
 
-def adduser(username,email,password):
-	conn = Connection()
-	db = conn['convenio']
-	db.convenio.insert([{'name':username,'email':email,'pw':password}])
+# def invalidpost(title, content):
+# 	conn = Connection()
+# 	db = conn['convenio_blog']
+# 	valid = (0 == (db.convenio_blog.find({'title':title})).count())
+# 	valid = valid and len(content) > 0 and len(title)>0
 
-def invalidpost(title, content):
-	conn = Connection()
-	db = conn['convenio_blog']
-	valid = (0 == (db.convenio_blog.find({'title':title})).count())
-	valid = valid and len(content) > 0 and len(title)>0
+# 	return not(valid)
 
-	return not(valid)
+# def invalidcomment(comment):
+# 	return len(comment)==0
 
-def invalidcomment(comment):
-	return len(comment)==0
+# def addpost(title, username,content):
+# 	conn = Connection()
+# 	db = conn['convenio_blog']
+# 	now = datetime.datetime.now()
+# 	db.convenio_blog.insert([{'title':title,'author':username,'content':content, 'comments':[], 'time':[now.month,now.day,now.year,now.hour,now.minute]}])
 
-def addpost(title, username,content):
-	conn = Connection()
-	db = conn['convenio_blog']
-	now = datetime.datetime.now()
-	db.convenio_blog.insert([{'title':title,'author':username,'content':content, 'comments':[], 'time':[now.month,now.day,now.year,now.hour,now.minute]}])
+# def addcomment(title, username,comment):
+# 	conn = Connection()
+# 	db = conn['convenio_blog']
+# 	now = datetime.datetime.now()
+# 	newcomment = [comment,username,[now.month,now.day,now.year,now.hour,now.minute]]
+# 	print newcomment
+# 	print title
+# 	db.convenio_blog.update({'title':title},{'$push':{'comments':newcomment}})
 
-def addcomment(title, username,comment):
-	conn = Connection()
-	db = conn['convenio_blog']
-	now = datetime.datetime.now()
-	newcomment = [comment,username,[now.month,now.day,now.year,now.hour,now.minute]]
-	print newcomment
-	print title
-	db.convenio_blog.update({'title':title},{'$push':{'comments':newcomment}})
-
-def votepost(title,points):
-	conn = Connection()
-	db = conn['convenio_blog']
-	db.convenio_blog.update({'title':title},{'$inc':{'points':points}})
+# def votepost(title,points):
+# 	conn = Connection()
+# 	db = conn['convenio_blog']
+# 	db.convenio_blog.update({'title':title},{'$inc':{'points':points}})
 
 
 # if __name__ == '__main__':

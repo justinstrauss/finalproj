@@ -4,21 +4,32 @@
 
 import db
 from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask_oauth import OAuth
 import urllib2, json, urllib
 import yelp
 #in the virtual env: $pip install facebook-sdk
 import facebook
 
 ##FACEBOOK GRAPH API
+FACEBOOK_APP_ID = '188477911223606'
+FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
+
 client_id = "935483263159079"
 client_secret = "ce39cb172d25891be741905badf002e9"
-access_token  = "935483263159079|7EyHz4GRI92YiJxik2E-91MuW1o"
+# access_token  = "935483263159079|7EyHz4GRI92YiJxik2E-91MuW1o"
 
 app = Flask(__name__)
+oauth = OAuth()
 
-def getID(token):
-        graph = facebook.GraphAPI(token);
-        return graph.get_object("me")["id"]
+facebook = oauth.remote_app('facebook',
+    base_url='https://graph.facebook.com/',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    authorize_url='https://www.facebook.com/dialog/oauth',
+    consumer_key=FACEBOOK_APP_ID,
+    consumer_secret=FACEBOOK_APP_SECRET,
+    request_token_params={'scope': 'email'}
+)
 
 def login_required(f):
     @wraps(f)
@@ -33,19 +44,46 @@ def login_required(f):
 @app.route('/')
 @app.route('/index')
 def index():
-    # graph = facebook.GraphAPI(access_token)
-    # profile = graph.get_object("me")
-    # friends = graph.get_connections("me", "friends")
-    # graph.put_object("me", "feed", message="I am writing on my wall!")
-    if 'user' not in session:
-        cookie = facebook.get_user_from_cookie(request.cookies, client_id, client_secret)
-        print cookie
-        if cookie != None:
-            session["token"]= cookie["access_token"]
-            session["user"]= getID(session["token"]);
-            redirect("/");
-        return render_template("index.html")
-    return render_template("index.html")
+    if "name" not in session:
+        session["name"] = None
+    if "id" not in session:
+        session['id'] = None
+    if "token" not in session:
+        session["token"] = None
+    return render_template("index.html", name=session['name'], id=session['id'], token=session['token'])
+
+@app.route('/login')
+def login():
+    return facebook.authorize(callback=url_for('facebook_authorized',
+        next=request.args.get('next') or request.referrer or None,
+        _external=True))
+
+@app.route('/login/authorized')
+@facebook.authorized_handler
+def facebook_authorized(resp):
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    me = facebook.get('/me')
+    session['name'] = me.data['name']
+    session['id'] = me.data['id']
+    session['token'] = (resp['access_token'])
+    if not db.userexists(session['id']):
+        db.adduser(session['name'],session['id'])
+    return redirect(url_for('index'))
+
+@facebook.tokengetter
+def get_facebook_oauth_token():
+    return session.get('oauth_token')
+
+@app.route('/logout')
+def logout():
+    session.pop('name', None)
+    session.pop('id', None)
+    session.pop('token', None)
+    return redirect(url_for('index'))
 
 @app.route('/account')
 def account():
