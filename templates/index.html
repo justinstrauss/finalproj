@@ -7,14 +7,18 @@
   <div class="pure-u-1-24"></div>
   <div class="pure-u-11-24">
     
-    Pending Chills: <br>
-    Chills you've been invited to but haven't responded to
+    <b> Pending Chills: </b> <br>
+    Chills you've been invited to but haven't responded to <br><br>
+
+    {% for key, value in pending.iteritems() %} <a href="/respond/{{value}}">{{key}}</a> {% endfor %}
 
     </div>
   <div class="pure-u-11-24">
 
-    Complete Chills: <br>
-    Chills that are ready to be attended
+    <b> Complete Chills: </b> <br>
+    Chills that are ready to be attended <br><br>
+
+    {% for key, value in ready.iteritems() %} <a href="/summary/{{value}}">{{key}}</a> {% endfor %}
 
     </div>
 </div>
