@@ -45,13 +45,13 @@ def login_required(f):
 @app.route('/')
 @app.route('/index')
 def index():
-    if "name" not in session:
-        session["name"] = None
     if "id" not in session:
+        session["name"] = None
         session['id'] = None
-    if "email" not in session:
         session['email'] = None
-    return render_template("index.html", name=session['name'], id=session['id'], email=session['email'])
+        return render_template("about.html")
+    else:
+        return render_template("index.html", name=session['name'], id=session['id'], email=session['email'])
 
 @app.route('/login')
 def login():
@@ -105,22 +105,36 @@ def account():
 @app.route('/create', methods=['GET','POST'])
 @login_required
 def create():
-    # if request.method=='GET':
-    foods = open('foods.txt').read()
-    foodlist = foods.split('\n')
-    # print foodlist
+    if request.method=='GET':
+        foods = open('foods.txt').read()
+        foodlist = foods.split('\n')
+        # print foodlist
 
-    fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
-    request = urllib2.urlopen(fburl)
-    result = request.read()
-    d = json.loads(result)
-    # a = open('sample.json').read()
-    # d = json.loads(a)
-    friendslist = d['data']
-    friends = [str(x["name"]) for x in friendslist]
-    # print friends
-    return render_template("create.html", friends=friends, foodlist=foodlist)
-
+        fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
+        request = urllib2.urlopen(fburl)
+        result = request.read()
+        d = json.loads(result)
+        # a = open('sample.json').read()
+        # d = json.loads(a)
+        friendslist = d['data']
+        friends = [str(x["name"]) for x in friendslist]
+        # print friends
+        return render_template("create.html", friends=friends, foodlist=foodlist)
+    else:
+        title = request.form['title']
+        who = request.form['who']
+        what = request.form['what']
+        where = request.form['where']
+        when = request.form['when']
+        date = request.form['date']
+        thetime = request.form['thetime']
+        print title
+        print who
+        print what
+        print where
+        print when
+        print date
+        print thetime
 
 # @app.route('/create', methods=['GET','POST'])
 # #@login_required
