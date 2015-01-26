@@ -36,6 +36,8 @@ Features:
 - [Google Maps API](https://developers.google.com/maps/) for directions and geolocation  
 - [JQuery](http://jquery.com/) for interactive form widgets  
 - [SQLite](http://www.sqlite.org/) for database storage  
+- [MongoDB](http://www.mongodb.org/) for database storage  
+- [Google Places](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete) for location autocompletion  
 
 ## Contributors
 [Lev Akabas](https://github.com/levakabas): Analytics, Back End  
