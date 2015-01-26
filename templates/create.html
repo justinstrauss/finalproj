@@ -105,6 +105,7 @@
   });
   </script>
 
+
   <script>
   $(function() {
     $( "#date" ).datepicker();
@@ -116,7 +117,6 @@
     $( "#thetime" ).timepicker();
   });
   </script>
-
 
 <form class="pure-form pure-form-aligned" method="POST">
     <fieldset>
@@ -132,10 +132,31 @@
 
         <div class="pure-control-group">
             <label for="where">WHERE do you want to meet? </label>
-            <input class="pure-input-2-3" id="where" type="text" placeholder="default set to current location, type in other location if desired" name="where">
+            <input class="pure-input-2-3" id="where" type="text" placeholder="default set to current location shown below, type in other location if desired" name="where">
         </div>
 
-        <div id="map-canvas"></div>
+        <div id="mapholder">
+
+        </div>
+
+        <script>
+var x = document.getElementById("demo");
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+    var img_url = "https://www.google.com/maps/embed/v1/place?q="+latlon+ "&key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4";
+
+    document.getElementById("mapholder").innerHTML = '<iframe width="400" height="300" frameborder="0" style="border:0" src='+img_url+'></iframe>';
+}
+getLocation();
+</script>
 
         <div class="pure-control-group">
             <label for="when">WHEN do you want to meet? </label>
