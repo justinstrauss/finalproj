@@ -5,6 +5,7 @@
 import db
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from flask_oauth import OAuth
+from functools import wraps
 import urllib2, json, urllib
 import yelp
 #in the virtual env: $pip install facebook-sdk
@@ -75,6 +76,8 @@ def facebook_authorized(resp):
     session['token'] = (resp['access_token'])
     if not db.userexists(session['id']):
         db.adduser(session['name'],session['id'],session['email'])
+        flash("Since you are a new user, please update your food preferences.")
+        return redirect(url_for('account'))
     return redirect(url_for('index'))
 
 @facebook.tokengetter
@@ -89,12 +92,24 @@ def logout():
     session.pop('email', None)
     return redirect(url_for('index'))
 
-@app.route('/account')
+@app.route('/account', methods=['GET','POST'])
+@login_required
 def account():
-    return render_template("account.html")
+    if request.method=='GET':
+        foods = open('foods.txt').read()
+        foodlist = foods.split('\n')
+        food = db.getfood(session['id'])
+        return render_template("account.html",name=session['name'], email=session["email"], foodlist=foodlist, preferences=food)
+    else:
+        preferences = request.form["what"]
+        preflist = [str(x) for x in preferences[:-2].split(',')]
+        # print preflist
+        db.updatefood(session['id'],preflist)
+        flash("Your food preferences have been updated.")
+        return redirect(url_for('index'))
 
 @app.route('/create', methods=['GET','POST'])
-#@login_required
+@login_required
 def create():
     # if request.method=='GET':
         foods = open('foods.txt').read()
