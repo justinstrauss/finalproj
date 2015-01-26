@@ -26,13 +26,16 @@ Features:
 ## Tools Utilized
 
 - [Python](https://www.python.org/) and [Flask](http://flask.pocoo.org/) for basic app backbone  
+- [Flask-OAuth](https://pythonhosted.org/Flask-OAuth/) for easy Facebook login within the microframework  
 - [Twitter Bootstrap](http://getbootstrap.com/) for CSS styling  
+- [Pure CSS](http://purecss.io/) for CSS styling  
+- [List Comprehensions](https://docs.python.org/2/tutorial/datastructures.html) for code simplicity  
 - [Digital Ocean](https://www.digitalocean.com/) for droplet deployment  
 - [Facebook Graph API](https://developers.facebook.com/docs/graph-api) for connecting with friends  
-- [Yelp API](http://www.yelp.com/developers/documentation)  
+- [Yelp API](http://www.yelp.com/developers/documentation) for restaurant searches  
 - [Google Maps API](https://developers.google.com/maps/) for directions and geolocation  
-- [JQuery](http://jquery.com/)  
-- [SQLite](http://www.sqlite.org/) for database storage
+- [JQuery](http://jquery.com/) for interactive form widgets  
+- [SQLite](http://www.sqlite.org/) for database storage  
 
 ## Contributors
 [Lev Akabas](https://github.com/levakabas): Analytics, Back End  
