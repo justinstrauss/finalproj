@@ -97,6 +97,10 @@ def account():
 #@login_required
 def create():
     # if request.method=='GET':
+        foods = open('foods.txt').read()
+        foodlist = foods.split('\n')
+        # print foodlist
+
         fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=%s" % (session["token"])
         request = urllib2.urlopen(fburl)
         result = request.read()
@@ -104,11 +108,9 @@ def create():
         # a = open('sample.json').read()
         # d = json.loads(a)
         friendslist = d['data']
-        friends = []
-        for eachfriend in friendslist:
-            friends.append(str(eachfriend["name"]))
+        friends = [str(x["name"]) for x in friendslist]
         # print friends
-        return render_template("create.html", friends=friends)
+        return render_template("create.html", friends=friends, foodlist=foodlist)
 
 
 # @app.route('/create', methods=['GET','POST'])
