@@ -1,6 +1,6 @@
 {% extends "base.html" %}
   {% block bodycontent %}
-<h1> Create a Chill </h1>
+<h1> Create New Chill </h1>
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -120,6 +120,11 @@
 
 <form class="pure-form pure-form-aligned" method="POST">
     <fieldset>
+        <div class="pure-control-group">
+            <label for="title">Title your Chill</label>
+            <input class="pure-input-2-3" id="title" type="text" placeholder="ex. 'Weekend Birthday Brunch'" name="title">
+        </div>
+
         <div class="pure-control-group">
             <label for="who">WHO do you want to invite? </label>
             <input class="pure-input-2-3" id="who" type="text" placeholder="select from Facebook friends who also use Convenio" name="who">

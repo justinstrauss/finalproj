@@ -12,21 +12,36 @@ def setup():
 
 	#default to test
 	users = []
-	#[name,id]
-	users.append(["Justin Strauss","100001767295555","justinianstrauss@gmail.com"])
-	users.append(["Lev Akabas","100001958141644","lakabas15@gmail.com"])
-	users.append(["Dennis Nenov","100000550963490", "nycdennen@gmail.com"])
+	#[name,id,email,food preferences[]]
+	users.append(["Justin Strauss","100001767295555","justinianstrauss@gmail.com", ["American"], ["1"]])
+	users.append(["Lev Akabas","100001958141644","lakabas15@gmail.com", ["Italian"], ["1"]])
+	users.append(["Dennis Nenov","100000550963490", "nycdennen@gmail.com", ["Mexican"], []])
 
 	dlist = []
 	for i in range(len(users)):
-		d = {'name':users[i][0],'id':users[i][1], 'email':users[i][2]}
+		d = {'name':users[i][0],'id':users[i][1], 'email':users[i][2], 'food':users[i][3], 'chills':users[i][4]}
 		dlist.append(d)
 
 	db.convenio.insert(dlist)
 
 
-	# db = conn['convenio_blog']
-	# db.convenio_blog.drop()
+	db = conn['chills']
+	db.chills.drop()
+
+	chills = []
+	# [name, id, chillersdict[], final plan]
+	# chillers is a dictionary: keys are the id's of the users that are invited, value is "pending" if they haven't filled out the response form or if they have, it's a list of their preferences
+	# preferences list [what, where, date, time]
+	# first person in chillers dict is the host
+	chills.append(["Regents Week Lunch","1",{"100001767295555":[["American","Mexican"],"Tribeca, New York, NY, United States","1/30/2015","3:00pm"],"100001958141644":"pending"}, []])
+
+	dlist = []
+	for i in range(len(chills)):
+		d = {'name':chills[i][0],'id':chills[i][1], 'chillers':chills[i][2], 'finalplan':chills[i][3]}
+		dlist.append(d)
+
+	db.convenio.insert(dlist)
+
 
 	# dlist = []
 	# dlist.append({'title':'First post weee!', 'author':'derek', 'content':'I have just made my first post.','comments':[['First comment!','justin',[11,2,2014,23,20]]],'time':[11,2,2014,23,13], 'points':2})
@@ -79,10 +94,10 @@ def userexists(fbid):
 # 	res = db.convenio_blog.find({'title':title},{"_id":False})
 # 	return res
 
-def getprofile(username):
+def getprofile(fbid):
 	conn = Connection()
 	db = conn['convenio']
-	res = db.convenio.find({'name':username},{"_id":False})
+	res = db.convenio.find({'id':fbid},{"_id":False})
 	info = [x for x in res]
 	return info
 
@@ -98,10 +113,22 @@ def getprofile(username):
 # 	db = conn['convenio']
 # 	db.convenio.update({'name':username},{'$set':{'pw':newpw}})
 
-def adduser(username,fbid):
+def adduser(username,fbid,email):
 	conn = Connection()
 	db = conn['convenio']
-	db.convenio.insert([{'name':username,'id':fbid}])
+	db.convenio.insert([{'name':username,'id':fbid, 'email':email, 'food':[], "chills":[]}])
+
+def getfood(fbid):
+	return getprofile(fbid)[0]['food']
+
+def updatefood(fbid, preflist):
+	conn = Connection()
+	db = conn['convenio']
+	db.convenio.update({'id':fbid},{'$set':{'food':preflist}})
+
+def getchills(fbid):
+	return getprofile(fbid)[0]['chills']
+
 
 # def invalidpost(title, content):
 # 	conn = Connection()
