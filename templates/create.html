@@ -111,35 +111,51 @@
   });
   </script>
 
+  <script>
+  $(function() {
+    $( "#thetime" ).timepicker();
+  });
+  </script>
+
+
 <form class="pure-form pure-form-aligned" method="POST">
     <fieldset>
         <div class="pure-control-group">
             <label for="who">WHO do you want to invite? </label>
-            <input id="who" type="text" placeholder="select from Facebook friends" name="who">
+            <input class="pure-input-2-3" id="who" type="text" placeholder="select from Facebook friends who also use Convenio" name="who">
         </div>
 
         <div class="pure-control-group">
             <label for="what">WHAT type of food do you prefer? </label>
-            <input id="what" type="text" placeholder="default set to preferences, type in other food if desired" name="what">
+            <input class="pure-input-2-3" id="what" type="text" placeholder="default set to preferences, type in other food if desired" name="what">
         </div>
 
         <div class="pure-control-group">
             <label for="where">WHERE do you want to meet? </label>
-            <input id="password" type="text" placeholder="default set to current location, type in other location if desired" name="where">
+            <input class="pure-input-2-3" id="where" type="text" placeholder="default set to current location, type in other location if desired" name="where">
         </div>
 
-    <div class="pure-control-group">
+        <div id="map-canvas"></div>
+
+        <div class="pure-control-group">
             <label for="when">WHEN do you want to meet? </label>
-            <input id="date" type="text" placeholder="select a date" name="date">
-            <input id="thetime" type="text" placeholder="select a time" name="thetime">
+            <input class="pure-input-1-3" id="date" type="text" placeholder="select a date" name="date">
+            <input class="pure-input-1-3" id="thetime" type="text" placeholder="select a time" name="thetime">
         </div>
 
         <div class="pure-controls">
-            <button type="submit" name="b" value="Register" class="pure-button pure-button-primary">Register</button>
+            <button type="submit" name="b" value="Register" class="pure-button pure-button-primary">Create</button>
         <button type="submit" name="b" value="Clear" class="pure-button pure-button-secondary">Clear</button>
         </div>
     </fieldset>
 </form>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+<script type="text/javascript">
+  var input = document.getElementById('where');
+var options = {componentRestrictions: {country: 'us'}};
+new google.maps.places.Autocomplete(input, options);e
+</script>
 
   <script>
   $(function() {
@@ -148,27 +164,6 @@
   </script>
 
 <form method="POST">
-
-  <div class="form-group">
-    <label for="friendList">List the friends you want to invite:</label>
-    <input type="text" class="form-control" id="friendList" placeholder="Enter friends">
-    <p class="help-block">Seperate names with a comma</p>
-  </div>
-
-  <div class="form-group">
-    <label for="locationEntry">Enter your location:</label>
-    <input type="text" name="locationEntry" class="form-control" id="locationEntry" placeholder="Enter location">
-  </div>
-
-  <div class="form-group">
-    <label for="activityEntry">What do you want to do:</label>
-    <input type="text" name="activityEntry" class="form-control" id="activityEntry" placeholder="Enter activity">
-  </div>
-
-  <div class="form-group">
-    <label for="activityEntry">When do you want to do this:</label>
-    <input type="text" class="form-control" id="dateEntry" placeholder="Enter date">
-  </div>
 
   <label>How will you get there:</label>
   <BR>
