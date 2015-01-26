@@ -7,9 +7,6 @@ DEBUG = True
 FACEBOOK_APP_ID = '188477911223606'
 FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
 
-client_id = "935483263159079"
-client_secret = "ce39cb172d25891be741905badf002e9"
-
 
 app = Flask(__name__)
 app.debug = DEBUG
@@ -49,24 +46,14 @@ def facebook_authorized(resp):
         )
     session['oauth_token'] = (resp['access_token'], '')
     me = facebook.get('/me')
-    print user_likes_page
-    return 'Logged in as id=%s name=%s redirect=%s token=%s' % \
-        (me.data['id'], me.data['name'], request.args.get('next'), session['oauth_token'])
+    return 'Logged in as id=%s name=%s redirect=%s' % \
+        (me.data['id'], me.data['name'], request.args.get('next'))
 
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
     return session.get('oauth_token')
 
-def user_likes_page():
-    url = 'https://graph.facebook.com/%d/likes/%d/' % (me.data['id'], "286286445569")
-    parameters = {'access_token': session['oauth_token']}
-    r = requests.get(url, params = parameters)
-    result = json.loads(r.text)
-    if result['data']:
-        return "yes"
-    else:
-        return "no"
 
 if __name__ == '__main__':
     app.run()
