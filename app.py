@@ -51,7 +51,7 @@ def index():
         session['email'] = None
         return render_template("about.html")
     else:
-        return render_template("index.html", name=session['name'], id=session['id'], email=session['email'])
+        return render_template("index.html")
 
 @app.route('/login')
 def login():
@@ -111,8 +111,8 @@ def create():
         # print foodlist
 
         fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
-        request = urllib2.urlopen(fburl)
-        result = request.read()
+        req = urllib2.urlopen(fburl)
+        result = req.read()
         d = json.loads(result)
         # a = open('sample.json').read()
         # d = json.loads(a)
