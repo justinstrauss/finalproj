@@ -51,7 +51,15 @@ def index():
         session['email'] = None
         return render_template("about.html")
     else:
-        return render_template("index.html")
+        ## pending = db.findpending(session['id'])
+        ## returns a dictionary of pending chills for that user, keys are titles, values are chill id's
+        ## ready = db.findready(session['id'])
+        ## returns a dictionary of ready chills for that user, keys are titles, values are chill id's
+        pending = {"Brunch":"2"}
+        ready = {"Regents Week Lunch":"1"}
+        print pending['Brunch']
+        print ready
+        return render_template("index.html", pending=pending, ready=ready)
 
 @app.route('/login')
 def login():
@@ -125,16 +133,32 @@ def create():
         who = request.form['who']
         what = request.form['what']
         where = request.form['where']
-        when = request.form['when']
         date = request.form['date']
         thetime = request.form['thetime']
-        print title
-        print who
-        print what
-        print where
-        print when
-        print date
-        print thetime
+        # Brunch
+        # Lev Akabas, Dennis Nenov, 
+        # Breakfast & Brunch, 
+        # 40.720997499999996,-73.8477874
+        # 01/27/2015
+        # 11:30am
+        ##db.addchill(session['id'], title, who, what, where, date, time)
+        ##chills.append(["Brunch","2",{"100001767295555":[["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"],"100001958141644":"pending", "100000550963490":"pending"}, []])
+        ##adds chill to the chill database table, 2nd element id is chill.length+1
+        return redirect(url_for('index'))
+
+@app.route('/respond/<chillid>', methods=['GET','POST'])
+@login_required
+def respond(chillid):
+    ## prefs = db.gethostprefs(chillid)
+    ## for example, it would return [["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"]
+    ## host = db.gethost(chillid)
+    ## host will return Justin Strauss
+    return render_template('respond.html')
+
+@app.route('/summary/<chillid>', methods=['GET','POST'])
+@login_required
+def summary(chillid):
+    return render_template('summary.html')
 
 # @app.route('/create', methods=['GET','POST'])
 # #@login_required
