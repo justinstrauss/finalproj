@@ -2,14 +2,11 @@
 # Software Development Period 7
 # Final Project
 
-import random, re, datetime
-from pymongo import Connection
+import random, re, datetime, pymongo
+
+connection = pymongo.Connection()
 
 def setup():
-	conn = Connection()
-	db = conn['convenio']
-	db.convenio.drop()
-
 	#default to test
 	users = []
 	#[name,id,email,food preferences[]]
@@ -21,11 +18,11 @@ def setup():
 	for i in range(len(users)):
 		d = {'name':users[i][0],'id':users[i][1], 'email':users[i][2], 'food':users[i][3], 'chills':users[i][4]}
 		dlist.append(d)
-
+	db = connection['convenio']
 	db.convenio.insert(dlist)
 
 
-	db = conn['chills']
+	db = connection['chills']
 	db.chills.drop()
 
 	chills = []
@@ -65,8 +62,7 @@ def setup():
 # 	return 1 == (db.convenio.find({'name':username,'pw':password})).count()
 
 def userexists(fbid):
-	conn = Connection()
-	db = conn['convenio']
+	db = connection['convenio']
 	return 1 == (db.convenio.find({'id':fbid})).count()
 
 # def emailexists(email):
@@ -95,8 +91,7 @@ def userexists(fbid):
 # 	return res
 
 def getprofile(fbid):
-	conn = Connection()
-	db = conn['convenio']
+	db = connection['convenio']
 	res = db.convenio.find({'id':fbid},{"_id":False})
 	info = [x for x in res]
 	return info
@@ -114,16 +109,14 @@ def getprofile(fbid):
 # 	db.convenio.update({'name':username},{'$set':{'pw':newpw}})
 
 def adduser(username,fbid,email):
-	conn = Connection()
-	db = conn['convenio']
+	db = connection['convenio']
 	db.convenio.insert([{'name':username,'id':fbid, 'email':email, 'food':[], "chills":[]}])
 
 def getfood(fbid):
 	return getprofile(fbid)[0]['food']
 
 def updatefood(fbid, preflist):
-	conn = Connection()
-	db = conn['convenio']
+	db = connection['convenio']
 	db.convenio.update({'id':fbid},{'$set':{'food':preflist}})
 
 def getchills(fbid):

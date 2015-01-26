@@ -19,7 +19,7 @@ Features:
 ## How to Install
 
 1. open up a terminal and type `$git clone git@github.com:justinstrauss/finalproj.git`
-2. create a virtual environment (optional) and type `$pip install flask`
+2. create a virtual environment (optional) and type `$pip install flask Flask-OAuth`
 3. type `$python app.py` to run the app
 4. go to [localhost:5000](localhost:5000) in your browser (Chrome is recommended)
 
@@ -27,6 +27,7 @@ Features:
 
 - [Python](https://www.python.org/) and [Flask](http://flask.pocoo.org/) for basic app backbone  
 - [Flask-OAuth](https://pythonhosted.org/Flask-OAuth/) for easy Facebook login within the microframework  
+- [Login Required Decorator](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/) for easy authentication
 - [Twitter Bootstrap](http://getbootstrap.com/) for CSS styling  
 - [Pure CSS](http://purecss.io/) for CSS styling  
 - [List Comprehensions](https://docs.python.org/2/tutorial/datastructures.html) for code simplicity  
@@ -36,6 +37,8 @@ Features:
 - [Google Maps API](https://developers.google.com/maps/) for directions and geolocation  
 - [JQuery](http://jquery.com/) for interactive form widgets  
 - [SQLite](http://www.sqlite.org/) for database storage  
+- [MongoDB](http://www.mongodb.org/) for database storage  
+- [Google Places](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete) for location autocompletion  
 
 ## Contributors
 [Lev Akabas](https://github.com/levakabas): Analytics, Back End  
