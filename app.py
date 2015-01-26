@@ -50,16 +50,14 @@ def index():
     if "id" not in session:
         session['id'] = None
     if "email" not in session:
-        session["email"] = None
-    if "token" not in session:
-        session["token"] = None
-    return render_template("index.html", name=session['name'], id=session['id'], email=session["email"], token=session['token'])
+        session['email'] = None
+    return render_template("index.html", name=session['name'], id=session['id'], email=session['email'])
 
 @app.route('/login')
 def login():
     return facebook.authorize(callback=url_for('facebook_authorized',
-        next=request.args.get('next') or request.referrer or None,
-        _external=True))
+    next=request.args.get('next') or request.referrer or None,
+    _external=True))
 
 @app.route('/login/authorized')
 @facebook.authorized_handler
@@ -69,17 +67,14 @@ def facebook_authorized(resp):
             request.args['error_reason'],
             request.args['error_description']
         )
+    session['oauth_token'] = (resp['access_token'], '')
+    session['token'] = resp['access_token']
     me = facebook.get('/me')
     session['name'] = me.data['name']
     session['id'] = me.data['id']
     session['email'] = me.data['email']
-    session['token'] = (resp['access_token'])
-    if not db.userexists(session['id']):
-        db.adduser(session['name'],session['id'],session['email'])
-        flash("Since you are a new user, please update your food preferences.")
-        return redirect(url_for('account'))
     return redirect(url_for('index'))
-
+    
 @facebook.tokengetter
 def get_facebook_oauth_token():
     return session.get('oauth_token')
@@ -88,7 +83,6 @@ def get_facebook_oauth_token():
 def logout():
     session.pop('name', None)
     session.pop('id', None)
-    session.pop('token', None)
     session.pop('email', None)
     return redirect(url_for('index'))
 
@@ -112,20 +106,20 @@ def account():
 @login_required
 def create():
     # if request.method=='GET':
-        foods = open('foods.txt').read()
-        foodlist = foods.split('\n')
-        # print foodlist
+    foods = open('foods.txt').read()
+    foodlist = foods.split('\n')
+    # print foodlist
 
-        fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=%s" % (session["token"])
-        request = urllib2.urlopen(fburl)
-        result = request.read()
-        d = json.loads(result)
-        # a = open('sample.json').read()
-        # d = json.loads(a)
-        friendslist = d['data']
-        friends = [str(x["name"]) for x in friendslist]
-        # print friends
-        return render_template("create.html", friends=friends, foodlist=foodlist)
+    fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
+    request = urllib2.urlopen(fburl)
+    result = request.read()
+    d = json.loads(result)
+    # a = open('sample.json').read()
+    # d = json.loads(a)
+    friendslist = d['data']
+    friends = [str(x["name"]) for x in friendslist]
+    # print friends
+    return render_template("create.html", friends=friends, foodlist=foodlist)
 
 
 # @app.route('/create', methods=['GET','POST'])
@@ -148,7 +142,7 @@ def create():
 #     return yelp.search(session.pop('search',None),session.pop('cll',None))
 
 if __name__ == '__main__':
-        db.setup()
-	app.secret_key = "don't store this on github"
-	app.debug = True
-	app.run(host='0.0.0.0')
+    db.setup()
+    app.secret_key = "don't store this on github"
+    app.debug = True
+    app.run()
