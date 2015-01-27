@@ -177,6 +177,23 @@ def respond(chillid):
         if thetime == "":
             thetime = prefs[3]
         ## db.addresponse(chillid,session['id'],what,where,date,time)
+        ## status = db.getstatus(chillid)
+        ## get status returns true if none of the values in the dictionary are "pending", returns false otherwise
+        #if status:
+            ## whats = db.getwhats(chillid) -> a list of lists of food preferences ex. [['Brunch','Mexican'],['Brunch']]
+            # alltheoptions = []
+            # for x in whats:
+            #     for y in x:
+            #         alltheoptions.append(y)
+            ## finalwhat = tally(alltheoptions) -> returns the option with the most votes
+            # ex. if alltheoptions is ['Brunch','Mexican','Brunch'], then brunch would win
+            ## wheres = db.getwheres(chillid) -> a list of the requested locations
+            ## midpoint = yelp.getmidpoint(wheres) -> takes a list and returns the midpoint location
+            ## people = db.getpeople(chillid) -> gets the host and invitees
+            ## restname = yelp.getrestname(midpoint,finalwhat)
+            ## restaddress = yelp.getrestaddress(midpoint,finalwhat)
+            # finalplan = [db.gettitle(chillid), people, restname, restaddress, finaldate, finaltime]
+            ## db.setfinalplan(chillid, finalplan)
         return redirect(url_for('index'))
 
 def reverse_geo(latlong):
