@@ -13,7 +13,7 @@ The first step is to select "Create New Chill", which will allow you to fill out
 
 After creating the Chill, the friends you invited will receive a notification on their dashboard to provide their own input. Invitees won't be able to change things like the title of the Chill or who's on the guestlist, but they'll be able to see what the host suggested in terms of cuisine, location, and time and either agree or offer their own input.
 
-Once everyone invited to a Chill has completed their response form, our application will analyze everyone's requests and determine both a restaurant and a time to meet up. This summary will show up on all of the guest's dashboards. If you want to get directions to the restaurant, simply input wherever you'll be departing from and you'll be able to compare travel time by walking, bicycling, driving, or riding public transit directly within the app. Now, it is up to you to enjoy your time out with friends, for which planning was made that much easier by Convenio.
+Once everyone invited to a Chill has completed their response form, our application will analyze everyone's requests and suggest five restaurants to the host, who gets to make the final call. Once the host approves a time and place, a summary will show up on all of the guest's dashboards. If you want to get directions to the restaurant, simply input wherever you'll be departing from and you'll be able to compare travel time by walking, bicycling, driving, or riding public transit directly within the app. Now, it is up to you to enjoy your time out with friends, for which planning was made that much easier by Convenio.
 
 ## How to Run Locally
 
@@ -26,14 +26,16 @@ Once everyone invited to a Chill has completed their response form, our applicat
 
 - [Python](https://www.python.org/) and [Flask](http://flask.pocoo.org/) for basic app backbone  
 - [Flask-OAuth](https://pythonhosted.org/Flask-OAuth/) for easy Facebook login within the microframework  
-- [Login Required Decorator](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/) for easy authentication
-- [Pure CSS](http://purecss.io/) for CSS styling  
+- [Login Required Decorator](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/) for easy authentication  
 - [List Comprehensions](https://docs.python.org/2/tutorial/datastructures.html) for code simplicity  
 - [Digital Ocean](https://www.digitalocean.com/) for droplet deployment  
-- [FreeDNS](http://freedns.afraid.org/) for web hosting
+- [Gunicorn](http://gunicorn.org/) as a WSGI server  
+- [nginx](http://nginx.org/) as a reverse proxy to the Gunicorn server  
+- [FreeDNS](http://freedns.afraid.org/) for web hosting  
 - [Facebook Graph API](https://developers.facebook.com/docs/graph-api) for connecting with friends  
 - [Yelp API](http://www.yelp.com/developers/documentation) for restaurant searches  
 - [Google Maps API](https://developers.google.com/maps/) for directions and geolocation  
+- [Pure CSS](http://purecss.io/) for CSS styling  
 - [JQuery](http://jquery.com/) for interactive form widgets  
 - [SQLite](http://www.sqlite.org/) for database storage  
 - [Google Places](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete) for location autocompletion  
