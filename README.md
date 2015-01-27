@@ -1,18 +1,19 @@
 Convenio: Convene with Convenience
 =========
-Software Development Fall Term Final Project
-Visit our website: [http://convenio.chill.in/](http://convenio.chill.in/)
-Watch our demo video: [https://www.youtube.com/user/justinianstrauss](https://www.youtube.com/user/justinianstrauss)
-
+Software Development Fall Term Final Project  
+Visit our website: [http://convenio.chill.in/](http://convenio.chill.in/)  
+Watch our demo video: [https://www.youtube.com/user/justinianstrauss](https://www.youtube.com/user/justinianstrauss)  
 ## About
 
-Have you ever tried to meet up with your friends only to realize that it is just too much of a headache to decide on a mutual restaurant and time to meet up? With Convenio, you and your friends can now convene with convenience.
+Have you ever tried to meet up with your friends only to realize that it's just too much of a headache to decide on a mutual restaurant and time to meet up? With Convenio, you and your friends can now convene with convenience.
 
-To get started, login into our website with your Facebook credentials. This allows us to connect you to your friends that also use the app. Don't worry, if none of your friends have joined us yet, you'll automatically be able to invite some of the app's creators, Justin, Lev, or Dennis. After logging in for the first time, remember to update your food preferences under the "My Account" tab.
+To get started, login to our website with your Facebook credentials. This allows us to connect you to your friends that also use the app. Don't worry, if none of your friends have joined us yet, you'll automatically be able to invite some of the app's creators, Justin, Lev, or Dennis. After logging in for the first time, remember to update your food preferences under the "My Account" tab.
 
-The first step is to select "Create New Chill", which will allow you fill out some basic information about the event you want to host. You'll answer some of the classic who, what, where, when, and why questions, except it is implied that the answer to why is because you want to have fun with friends. WHO do you want to invite? WHAT type of food do you prefer? WHERE do you want to meet? WHEN do you want to meet? Don't worry, we've got your back, all of the fields except for the title of the chill itslef will autocomplete for convenience.
+The first step is to select "Create New Chill", which will allow you to fill out some basic information about the event you want to host. You'll answer some of the classic who, what, where, when, and why questions, except it is implied that the answer to why is because you want to have fun with friends. WHO do you want to invite? WHAT type of food do you prefer? WHERE do you want to meet? WHEN do you want to meet? Don't worry, we've got your back, all of the fields except for the title of the Chill itself will autocomplete for convenience.
 
-After creating the chill, the friends you invited will receive a notification on their dashboard.
+After creating the Chill, the friends you invited will receive a notification on their dashboard to provide their own input. Invitees won't be able to change things like the title of the Chill or who's on the guestlist, but they'll be able to see what the host suggested in terms of cuisine, location, and time and either agree or offer their own input.
+
+Once everyone invited to a Chill has completed their response form, our application will analyze everyone's requests and determine both a restaurant and a time to meet up. This summary will show up on all of the guest's dashboards. If you want to get directions to the restaurant, simply input wherever you'll be departing from and you'll be able to compare travel time by walking, bicycling, driving, or riding public transit directly within the app. Now, it is up to you to enjoy your time out with friends, for which planning was made that much easier by Convenio.
 
 ## How to Run Locally
 
@@ -51,7 +52,7 @@ After creating the chill, the friends you invited will receive a notification on
 - [ ] 1/11: integrate Yelp API (Lev)
 - [X] 1/13: geolocation added (Justin)
 - [X] 1/15: finish basic front end UI (Derek)
-- [X] 1/17: layout "create new chill" form (Dennis)
+- [X] 1/17: layout "Create New Chill" form (Dennis)
 - [ ] 1/19: integrate directions - Google Maps walking transit biking drive, Citibike, Uber (Justin, Derek)
 - [ ] 1/25: complete front page integration
 - [ ] 1/27: fin  
