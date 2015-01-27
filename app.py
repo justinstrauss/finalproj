@@ -132,6 +132,8 @@ def create():
         title = request.form['title']
         who = request.form['who']
         what = request.form['what']
+        if what == "":
+            what = db.getfood(session['id'])
         where = request.form['where']
         if where[:1].isdigit():
             where = urllib.unquote(reverse_geo(where)).decode('utf8').replace("+"," ")
