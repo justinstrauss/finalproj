@@ -133,6 +133,8 @@ def create():
         who = request.form['who']
         what = request.form['what']
         where = request.form['where']
+        if where[:1].isdigit():
+            where = urllib.unquote(reverse_geo(where)).decode('utf8').replace("+"," ")
         date = request.form['date']
         thetime = request.form['thetime']
         # Brunch
@@ -149,26 +151,49 @@ def create():
 @app.route('/respond/<chillid>', methods=['GET','POST'])
 @login_required
 def respond(chillid):
+    ## prefs = db.gethostprefs(chillid)
+    ## for example, it would return [["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"]
+    ## host = db.gethost(chillid)
+    ## host will return Justin Strauss
+    ## title = db.gettitle(chillid)
+    prefs = [["Breakfast & Brunch"],"69-50 Austin Street, Flushing, NY 11366, USA","1/27/2015","11:30am"]
+    # if prefs[1][:1].isdigit():
+    #     prefs[1] = urllib.unquote(reverse_geo(prefs[1])).decode('utf8').replace("+"," ")
+    host = "Justin Strauss"
+    title = "Brunch"
     if request.method=='GET':
-        ## prefs = db.gethostprefs(chillid)
-        ## for example, it would return [["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"]
-        ## host = db.gethost(chillid)
-        ## host will return Justin Strauss
-        ## title = db.gettitle(chillid)
-        prefs = [["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"]
-        if prefs[1][:1].isdigit():
-            prefs[1] = url=urllib.unquote(reverse_geo(prefs[1])).decode('utf8').replace("+"," ")
-        host = "Justin Strauss"
-        title = "Brunch"
         return render_template('respond.html',host=host, prefs=prefs, title=title)
     else:
         what = request.form['what']
-        print "what"
-        print what
+        if what == "":
+            what = prefs[0]
         where = request.form['where']
+        if where == "":
+            where = prefs[1]
         date = request.form['date']
+        if date == "":
+            date = prefs[2]
         thetime = request.form['thetime']
-
+        if thetime == "":
+            thetime = prefs[3]
+        ## db.addresponse(chillid,session['id'],what,where,date,time)
+        ## status = db.getstatus(chillid)
+        ## get status returns true if none of the values in the dictionary are "pending", returns false otherwise
+        #if status:
+            ## whats = db.getwhats(chillid) -> a list of lists of food preferences ex. [['Brunch','Mexican'],['Brunch']]
+            # alltheoptions = []
+            # for x in whats:
+            #     for y in x:
+            #         alltheoptions.append(y)
+            ## finalwhat = tally(alltheoptions) -> returns the option with the most votes
+            # ex. if alltheoptions is ['Brunch','Mexican','Brunch'], then brunch would win
+            ## wheres = db.getwheres(chillid) -> a list of the requested locations
+            ## midpoint = yelp.getmidpoint(wheres) -> takes a list and returns the midpoint location
+            ## people = db.getpeople(chillid) -> gets the host and invitees
+            ## restname = yelp.getrestname(midpoint,finalwhat)
+            ## restaddress = yelp.getrestaddress(midpoint,finalwhat)
+            # finalplan = [db.gettitle(chillid), people, restname, restaddress, finaldate, finaltime]
+            ## db.setfinalplan(chillid, finalplan)
         return redirect(url_for('index'))
 
 def reverse_geo(latlong):
