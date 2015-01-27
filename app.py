@@ -158,7 +158,15 @@ def respond(chillid):
 @app.route('/summary/<chillid>', methods=['GET','POST'])
 @login_required
 def summary(chillid):
-    return render_template('summary.html')
+    ## finalplan = db.getfinalplan(chillid)
+    ## returns the final element of the chill list
+    finalplan = ["Regents Week Lunch",["Justin Strauss","Dennis Nenov", "Lev Akabas"], "American Flatbread New York, NY", "205 Hudson Street, New York, NY 10013", "1/30/2015","3:00pm"]
+    imgurl = "https://www.google.com/maps/embed/v1/place?q="+finalplan[3]+"&key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4"
+    if request.method=='GET':
+        return render_template('summary.html', finalplan=finalplan, imgurl=imgurl, origin=None)
+    else:
+        origin = request.form['origin']
+        return render_template('summary.html', finalplan=finalplan, imgurl=imgurl, origin=origin)
 
 # @app.route('/create', methods=['GET','POST'])
 # #@login_required

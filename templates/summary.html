@@ -3,4 +3,66 @@
 
 <h1> Chill Summary </h1>
 
+<b>{{finalplan[0]}}</b><br><br>
+<i>with</i> {% for x in finalplan[1] %} {{x}}, {% endfor %} <br><br>
+<i>at</i> {{finalplan[2]}} <br>
+<iframe width="400" height="300" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q={{finalplan[3]}}&key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4" ></iframe><br><br>
+
+<i>on</i> {{finalplan[4]}} <i>at</i> {{finalplan[5]}}<br><br>
+
+{% if origin==None %}
+
+<form class="pure-form pure-form-aligned" method="POST">
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="origin">To get directions, let us know where you'll be commuting from.</label>
+            <input class="pure-input-2-3" id="origin" type="text" placeholder="type a location" name="origin">
+        </div>
+
+        <div class="pure-controls">
+            <button type="submit" name="b" value="Create" class="pure-button pure-button-primary">Search</button>
+        </div>
+    </fieldset>
+</form>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+<script type="text/javascript">
+  var input = document.getElementById('origin');
+var options = {componentRestrictions: {country: 'us'}};
+new google.maps.places.Autocomplete(input, options);e
+</script>
+
+{% else %}
+
+<hr>
+How to get there: <br>
+
+<div class="pure-g">
+  <div class="pure-u-1-24"></div>
+  <div class="pure-u-11-24">
+    
+Walking: <br>
+
+<iframe width="400" height="300" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4&origin={{origin}}&destination={{finalplan[3]}}&avoid=tolls|highways&mode=walking"></iframe><br>
+
+Biking: <br>
+
+<iframe width="400" height="300" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4&origin={{origin}}&destination={{finalplan[3]}}&avoid=tolls|highways&mode=bicycling"></iframe><br>
+
+    </div>
+  <div class="pure-u-11-24">
+
+Driving: <br>
+
+<iframe width="400" height="300" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4&origin={{origin}}&destination={{finalplan[3]}}&avoid=tolls|highways&mode=driving"></iframe><br>
+
+Transit: <br>
+
+<iframe width="400" height="300" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4&origin={{origin}}&destination={{finalplan[3]}}&avoid=tolls|highways&mode=transit"></iframe><br>
+
+    </div>
+</div>
+
+{% endif %}
+
   {% endblock bodycontent %}
