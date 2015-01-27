@@ -250,7 +250,7 @@ getLocation();
 
 <script>
 var n = document.getElementById("what");
-n.value = "{{food}}";
+n.value = "{{food|safe}}";
 </script>
 
   {% endblock bodycontent %}
