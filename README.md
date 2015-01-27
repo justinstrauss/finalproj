@@ -30,6 +30,7 @@ Once everyone invited to a Chill has completed their response form, our applicat
 - [Pure CSS](http://purecss.io/) for CSS styling  
 - [List Comprehensions](https://docs.python.org/2/tutorial/datastructures.html) for code simplicity  
 - [Digital Ocean](https://www.digitalocean.com/) for droplet deployment  
+- [FreeDNS](http://freedns.afraid.org/) for web hosting
 - [Facebook Graph API](https://developers.facebook.com/docs/graph-api) for connecting with friends  
 - [Yelp API](http://www.yelp.com/developers/documentation) for restaurant searches  
 - [Google Maps API](https://developers.google.com/maps/) for directions and geolocation  
@@ -47,12 +48,16 @@ Once everyone invited to a Chill has completed their response form, our applicat
 - [X] 12/19: finalize project idea (all)
 - [X] 12/24 - 1/4: finish college apps (Justin and Dennis) and work on project during free time (Lev and Derek) during winter break  
 - [X] 1/5: get login with Facebook working (Derek)
-- [X] 1/7: deploy Digital Ocean droplet (Justin)
+- [X] 1/7: test Digital Ocean droplet (Justin)
 - [X] 1/9: move Facebook login from separate page to menu bar (Justin)
-- [ ] 1/11: integrate Yelp API (Lev)
+- [X] 1/11: integrate Yelp API (Lev)
 - [X] 1/13: geolocation added (Justin)
 - [X] 1/15: finish basic front end UI (Derek)
 - [X] 1/17: layout "Create New Chill" form (Dennis)
-- [ ] 1/19: integrate directions - Google Maps walking transit biking drive, Citibike, Uber (Justin, Derek)
-- [ ] 1/25: complete front page integration
-- [ ] 1/27: fin  
+- [X] 1/19: integrate directions - Google Maps walking, transit, biking, driving (Justin)
+- [X] 1/21: layout response form (Justin)
+- [X] 1/23: fix login with Facebook (Dennis and Lev)
+- [X] 1/24: layout summary form (Justin)
+- [X] 1/25: complete front page integration (Justin)
+- [X] 1/26: finalize database methods (Dennis)
+- [ ] 1/27: make demo video and deploy on Digital Ocean (Justin)
