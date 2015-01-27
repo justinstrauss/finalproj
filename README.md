@@ -13,7 +13,7 @@ The first step is to select "Create New Chill", which will allow you to fill out
 
 After creating the Chill, the friends you invited will receive a notification on their dashboard to provide their own input. Invitees won't be able to change things like the title of the Chill or who's on the guestlist, but they'll be able to see what the host suggested in terms of cuisine, location, and time and either agree or offer their own input.
 
-Once everyone invited to a Chill has completed their response form, our application will analyze everyone's requests and suggest five restaurants to the host, who gets to make the final call. Once the host approves a time and place, a summary will show up on all of the guest's dashboards. If you want to get directions to the restaurant, simply input wherever you'll be departing from and you'll be able to compare travel time by walking, bicycling, driving, or riding public transit directly within the app. Now, it is up to you to enjoy your time out with friends, for which planning was made that much easier by Convenio.
+Once everyone invited to a Chill has completed their response form, our application will analyze everyone's requests and suggest five restaurants to the host, who gets to make the final call. Once the host approves a time and place, a summary will appear on all of the guest's dashboards. If you want to get directions to the restaurant, simply input wherever you'll be departing from and you'll be able to compare travel time by walking, bicycling, driving, or riding public transit directly within the app. Now, it is up to you to enjoy your time out with friends, for which planning was made that much easier by Convenio.
 
 ## How to Run Locally
 
