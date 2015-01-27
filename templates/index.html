@@ -1,26 +1,59 @@
 {% extends "base.html" %}
   {% block bodycontent %}
 
-<h1> Convenio Dashboard </h1>
 
-<div class="pure-g">
-  <div class="pure-u-1-24"></div>
-  <div class="pure-u-11-24">
-    
-    <b> Pending Chills: </b> <br>
-    Chills you've been invited to but haven't responded to <br><br>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span3">
+        <div class="well sidebar-nav">
+          <ul class="nav nav-list">
+            <li class="nav-header">Sidebar</li>
+            <li class="active"><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li class="nav-header">Sidebar</li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li class="nav-header">Sidebar</li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+          </ul>
+        </div><!--/.well -->
+      </div><!--/span-->
+      <div class="span9">
+        <div class="hero-unit">
+          <h1>Hello, world!</h1>
+          <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+          <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        </div>
 
-    {% for key, value in pending.iteritems() %} <a href="/respond/{{value}}">{{key}}</a> {% endfor %}
+        <div class="row-fluid">
+          <div class="span6">
+            <h3> Pending Chills: </h3>
+            Chills you've been invited to but haven't responded to <br>
 
-    </div>
-  <div class="pure-u-11-24">
+            {% for key, value in pending.iteritems() %} <a href="/respond/{{value}}">{{key}}</a> {% endfor %}
+            <br><br>
+            <p><a class="btn" href="#">View details &raquo;</a></p>
+          </div><!--/span-->
+          <div class="span6">
+            <h3>Complete Chills: </h3>
+            Chills that are ready to be attended <br>
 
-    <b> Complete Chills: </b> <br>
-    Chills that are ready to be attended <br><br>
+            {% for key, value in ready.iteritems() %} <a href="/summary/{{value}}">{{key}}</a> {% endfor %}
+            <br><br>
+            <p><a class="btn" href="#">View details &raquo;</a></p>
+          </div><!--/span-->
+        </div><!--/row-->
+      </div><!--/span-->
+    </div><!--/row-->
 
-    {% for key, value in ready.iteritems() %} <a href="/summary/{{value}}">{{key}}</a> {% endfor %}
-
-    </div>
-</div>
+    <hr>
 
   {% endblock bodycontent %}
