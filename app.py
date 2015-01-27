@@ -59,9 +59,9 @@ def index():
         ## returns a dictionary of ready chills for that user, keys are titles, values are chill id's
         pending = {"Brunch":"2"}
         ready = {"Regents Week Lunch":"1"}
-        # print pending['Brunch']
-        # print ready
-        return render_template("index.html", pending=pending, ready=ready)
+        needsapproval = {"Party":"3"}
+        # needsapproval = db.findneedsapproval(session['id'])
+        return render_template("index.html", pending=pending, ready=ready, needsapproval=needsapproval)
 
 @app.route('/login')
 def login():
@@ -154,7 +154,7 @@ def create():
         # 01/27/2015
         # 11:30am
         ##db.addchill(session['id'], title, who, what, where, date, time)
-        ##chills.append(["Brunch","2",{"100001767295555":[["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"],"100001958141644":"pending", "100000550963490":"pending"}, []])
+        ##chills.append(["Brunch","2",{"100001767295555":[["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"],"100001958141644":"pending", "100000550963490":"pending"}, [], []])
         ##adds chill to the chill database table, 2nd element id is chill.length+1
         return redirect(url_for('index'))
 
@@ -199,13 +199,40 @@ def respond(chillid):
             for x in range(0,len(wheres)):
                 if not wheres[x][-7:].isdigit():
                     wheres[x] = geo_loc(wheres[x])
-            print wheres
+            #print wheres
             ## people = db.getpeople(chillid) -> gets the host and invitees
             restaurant_list = yelp.search(whats,wheres)
-            print restaurant_list
-
-            ## Something here taking the list of suggestions and picking one
+            # print restaurant_list
+            # needsapproval = [db.gettitle(chillid), people, restaurant_list, datelist, timelist]
+            ## db.setneedsapproval(chillid, needsapproval)
         return redirect(url_for('index'))
+
+@app.route('/approve/<chillid>', methods=['GET','POST'])
+@login_required
+def approve(chillid):
+    ## needsapproval = db.getneedsapproval(chillid)
+    needsapproval = ['Party', ['Justin Strauss','Derek Tsui'], [{'website': u'http://www.yelp.com/biz/al-horno-lean-mexican-kitchen-new-york', 'name': u'Al Horno Lean Mexican Kitchen', 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'417 W 47th St']}, {'website': u'http://www.yelp.com/biz/hells-kitchen-new-york-2', 'name': u"Hell's Kitchen", 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'679 9th Ave']}, {'website': u'http://www.yelp.com/biz/taqueria-tehuitzingo-new-york', 'name': u'Taqueria Tehuitzingo', 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'578 9th Ave']}, {'website': u'http://www.yelp.com/biz/ponche-taqueria-and-cantina-new-york', 'name': u'Ponche Taqueria & Cantina', 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'420 W 49th St']}, {'website': u'http://www.yelp.com/biz/toloache-new-york-2', 'name': u'Toloache', 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'251 W 50th St']}], ["1/27/2015","1/27/2015"], ['1:30pm','2:00pm']]
+    # addresses = []
+    # for x in range(0,4):
+    #     addresses.append(str(needsapproval[2][x]['address'][0]))
+    # print addresses
+    if request.method=='GET':
+        return render_template('approve.html', needsapproval=needsapproval, numtimes=len(needsapproval[3]))
+    else:
+        rest = request.form['restRadios']
+        time = request.form['timeRadios']
+        restaurantname = needsapproval[2][int(rest[-1:])]['name']
+        restaurantaddress = needsapproval[2][int(rest[-1:])]['address'][0]
+        finaldate = needsapproval[3][int(time[-1:])]
+        finaltime = needsapproval[4][int(time[-1:])]
+        # print restaurantname
+        # print restaurantaddress
+        # print finaldate
+        # print finaltime
+        # finalplan = [needsapproval[0], needsapproval[1], restaurantname, restaurantaddress, finaldate, finaltime]
+        ## db.setfinalplan(chillid, finalplan)
+        return redirect(url_for('index'))
+
 
 def reverse_geo(latlong):
         googleurl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s&key=%s" % (latlong.split(",")[0], latlong.split(",")[1], 'AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4')
@@ -237,6 +264,7 @@ def summary(chillid):
     ## finalplan = db.getfinalplan(chillid)
     ## returns the final element of the chill list
     finalplan = ["Regents Week Lunch",["Justin Strauss","Dennis Nenov", "Lev Akabas"], "American Flatbread New York, NY", "205 Hudson Street, New York, NY 10013", "1/30/2015","3:00pm"]
+    # print finalplan[3]
     imgurl = "https://www.google.com/maps/embed/v1/place?q="+finalplan[3]+"&key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4"
     if request.method=='GET':
         return render_template('summary.html', finalplan=finalplan, imgurl=imgurl, origin=None)
