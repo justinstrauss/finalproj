@@ -57,8 +57,8 @@ def index():
         ## returns a dictionary of ready chills for that user, keys are titles, values are chill id's
         pending = {"Brunch":"2"}
         ready = {"Regents Week Lunch":"1"}
-        print pending['Brunch']
-        print ready
+        # print pending['Brunch']
+        # print ready
         return render_template("index.html", pending=pending, ready=ready)
 
 @app.route('/login')
@@ -149,11 +149,37 @@ def create():
 @app.route('/respond/<chillid>', methods=['GET','POST'])
 @login_required
 def respond(chillid):
-    ## prefs = db.gethostprefs(chillid)
-    ## for example, it would return [["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"]
-    ## host = db.gethost(chillid)
-    ## host will return Justin Strauss
-    return render_template('respond.html')
+    if request.method=='GET':
+        ## prefs = db.gethostprefs(chillid)
+        ## for example, it would return [["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"]
+        ## host = db.gethost(chillid)
+        ## host will return Justin Strauss
+        ## title = db.gettitle(chillid)
+        prefs = [["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"]
+        if prefs[1][:1].isdigit():
+            prefs[1] = url=urllib.unquote(reverse_geo(prefs[1])).decode('utf8').replace("+"," ")
+        host = "Justin Strauss"
+        title = "Brunch"
+        return render_template('respond.html',host=host, prefs=prefs, title=title)
+    else:
+        what = request.form['what']
+        print "what"
+        print what
+        where = request.form['where']
+        date = request.form['date']
+        thetime = request.form['thetime']
+
+        return redirect(url_for('index'))
+
+def reverse_geo(latlong):
+        googleurl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=%s,%s&key=%s" % (latlong.split(",")[0], latlong.split(",")[1], 'AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4')
+        request = urllib2.urlopen(googleurl)
+        result = request.read()
+        d = json.loads(result)
+        rdic = d['results'][0]
+        address = rdic['formatted_address']
+        address = urllib.quote_plus(address)
+        return address
 
 @app.route('/summary/<chillid>', methods=['GET','POST'])
 @login_required
