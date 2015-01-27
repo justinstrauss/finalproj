@@ -12,12 +12,8 @@ import yelp
 import facebook
 
 ##FACEBOOK GRAPH API
-FACEBOOK_APP_ID = '188477911223606'
-FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
-
-client_id = "935483263159079"
-client_secret = "ce39cb172d25891be741905badf002e9"
-# access_token  = "935483263159079|7EyHz4GRI92YiJxik2E-91MuW1o"
+FACEBOOK_APP_ID = "935483263159079"
+FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
 
 app = Flask(__name__)
 db.setup()
@@ -81,9 +77,10 @@ def facebook_authorized(resp):
     session['oauth_token'] = (resp['access_token'], '')
     session['token'] = resp['access_token']
     me = facebook.get('/me')
+    print me.data
     session['name'] = me.data['name']
     session['id'] = me.data['id']
-    session['email'] = me.data['email']
+    # session['email'] = me.data['email']
     return redirect(url_for('index'))
     
 @facebook.tokengetter
@@ -122,6 +119,7 @@ def create():
         # print foodlist
 
         fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
+        print fburl
         req = urllib2.urlopen(fburl)
         result = req.read()
         d = json.loads(result)
