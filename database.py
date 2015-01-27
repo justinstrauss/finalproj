@@ -105,8 +105,16 @@ def get_invitees(invite_id):
 #returns true if everyone responded
 def see_if_everyone_responded(invite_id):
     listToScan = get_location_preferences(invite_id)
-    for element in listToScan:
-        if element == "None":
+    for item in listToScan:
+        if item == "None":
+            return False
+    return True
+
+#returns true if the invite is finalized--i.e. the owner picked a location
+def see_if_finalized(invite_id):
+    dictToScan = get_invite_dict(invite_id)
+    for key in dictToScan.keys():
+        if dictToScan[key] == "None":
             return False
     return True
 
@@ -204,13 +212,31 @@ def add_user(name, facebook_id):
     conn.commit()
     conn.close()
 
+def get_invites_for_user(facebook_id):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    masterdict = {}
+    masterdict['pending'] = []
+    masterdict['ready'] = []
+    masterdict['needsapproval'] = []
+    for row in c.execute("select invite_id from userinvitematch where facebook_id=='" + facebook_id + "'"):
+        invite_title = get_invite_title(row[0])
+        invite_id = row[0]
+        package = [invite_id, invite_title]
+        if (see_if_finalized(invite_id)):
+            masterdict['ready'].append(package)
+        elif (see_if_everyone_responded(invite_id)):
+            masterdict['needsapproval'].append(package)
+        else:
+            masterdict['pending'].append(package)
+    conn.commit()
+    conn.close()
+    return masterdict
 
 def test():
     #create_db()
     #add_invite("Test Chill", "Dennis", ["Lev", "Justin"],["Tacos", "Pizza"], "NYC", "11:00am", "12/13/15")
-    print user_exists("Dennis")
-    print user_exists("Lev")
-    print user_exists("Pizza")
+    print get_invites_for_user("Dennis")
     con = sqlite3.connect('database.db')
     cursor = con.cursor()
     cursor.execute("SELECT * FROM invites")
