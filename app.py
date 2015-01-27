@@ -16,6 +16,9 @@ FACEBOOK_APP_ID = "935483263159079"
 FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
 
 app = Flask(__name__)
+db.setup()
+app.secret_key = "don't store this on github"
+app.debug = True
 oauth = OAuth()
 
 facebook = oauth.remote_app('facebook',
@@ -186,19 +189,11 @@ def respond(chillid):
         ## get status returns true if none of the values in the dictionary are "pending", returns false otherwise
         #if status:
             ## whats = db.getwhats(chillid) -> a list of lists of food preferences ex. [['Brunch','Mexican'],['Brunch']]
-            # alltheoptions = []
-            # for x in whats:
-            #     for y in x:
-            #         alltheoptions.append(y)
-            ## finalwhat = tally(alltheoptions) -> returns the option with the most votes
-            # ex. if alltheoptions is ['Brunch','Mexican','Brunch'], then brunch would win
             ## wheres = db.getwheres(chillid) -> a list of the requested locations
-            ## midpoint = yelp.getmidpoint(wheres) -> takes a list and returns the midpoint location
             ## people = db.getpeople(chillid) -> gets the host and invitees
-            ## restname = yelp.getrestname(midpoint,finalwhat)
-            ## restaddress = yelp.getrestaddress(midpoint,finalwhat)
-            # finalplan = [db.gettitle(chillid), people, restname, restaddress, finaldate, finaltime]
-            ## db.setfinalplan(chillid, finalplan)
+            ## restaurant_list = yelp.search(whats,wheres)
+
+            ## Something here taking the list of suggestions and picking one
         return redirect(url_for('index'))
 
 def reverse_geo(latlong):
@@ -244,7 +239,4 @@ def summary(chillid):
 #     return yelp.search(session.pop('search',None),session.pop('cll',None))
 
 if __name__ == '__main__':
-    db.setup()
-    app.secret_key = "don't store this on github"
-    app.debug = True
     app.run()
