@@ -20,6 +20,9 @@ client_secret = "ce39cb172d25891be741905badf002e9"
 # access_token  = "935483263159079|7EyHz4GRI92YiJxik2E-91MuW1o"
 
 app = Flask(__name__)
+db.setup()
+app.secret_key = "don't store this on github"
+app.debug = True
 oauth = OAuth()
 
 facebook = oauth.remote_app('facebook',
@@ -241,7 +244,4 @@ def summary(chillid):
 #     return yelp.search(session.pop('search',None),session.pop('cll',None))
 
 if __name__ == '__main__':
-    db.setup()
-    app.secret_key = "don't store this on github"
-    app.debug = True
     app.run()
