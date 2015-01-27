@@ -11,9 +11,13 @@ import yelp
 #in the virtual env: $pip install facebook-sdk
 import facebook
 
-##FACEBOOK GRAPH API
-FACEBOOK_APP_ID = "935483263159079"
-FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
+##FACEBOOK GRAPH API: use these if running on serve
+# FACEBOOK_APP_ID = "935483263159079"
+# FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
+
+##FACEBOOK GRAPH API: use these if running on localhost
+FACEBOOK_APP_ID = '188477911223606'
+FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
 
 app = Flask(__name__)
 db.setup()
@@ -44,10 +48,9 @@ def login_required(f):
 @app.route('/')
 @app.route('/index')
 def index():
-    if "id" not in session:
+    if "id" not in session or session['id']==None:
         session["name"] = None
         session['id'] = None
-        session['email'] = None
         return render_template("about.html")
     else:
         ## pending = db.findpending(session['id'])
@@ -77,11 +80,14 @@ def facebook_authorized(resp):
     session['oauth_token'] = (resp['access_token'], '')
     session['token'] = resp['access_token']
     me = facebook.get('/me')
-    print me.data
     session['name'] = me.data['name']
     session['id'] = me.data['id']
-    # session['email'] = me.data['email']
+    if not db.userexists(session['id']):
+        db.adduser(session['name'],session['id'])
+        flash("Since you are a new user, please update your food preferences.")
+        return redirect(url_for('account'))
     return redirect(url_for('index'))
+
     
 @facebook.tokengetter
 def get_facebook_oauth_token():
@@ -91,7 +97,6 @@ def get_facebook_oauth_token():
 def logout():
     session.pop('name', None)
     session.pop('id', None)
-    session.pop('email', None)
     return redirect(url_for('index'))
 
 @app.route('/account', methods=['GET','POST'])
@@ -101,7 +106,7 @@ def account():
         foods = open('foods.txt').read()
         foodlist = foods.split('\n')
         food = db.getfood(session['id'])
-        return render_template("account.html",name=session['name'], email=session["email"], foodlist=foodlist, preferences=food)
+        return render_template("account.html",name=session['name'], foodlist=foodlist, preferences=food)
     else:
         preferences = request.form["what"]
         preflist = [str(x) for x in preferences[:-2].split(',')]
@@ -119,7 +124,6 @@ def create():
         # print foodlist
 
         fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
-        print fburl
         req = urllib2.urlopen(fburl)
         result = req.read()
         d = json.loads(result)
@@ -128,16 +132,19 @@ def create():
         friendslist = d['data']
         friends = [str(x["name"]) for x in friendslist]
         # print friends
-        return render_template("create.html", friends=friends, foodlist=foodlist)
+        food = db.getfood(session['id'])
+        foodstr = ""
+        for x in food:
+            foodstr += x+","
+        return render_template("create.html", friends=friends, foodlist=foodlist, food=foodstr)
     else:
         title = request.form['title']
         who = request.form['who']
         what = request.form['what']
-        if what == "":
-            what = db.getfood(session['id'])
         where = request.form['where']
-        if where[:1].isdigit():
+        if where[-7:].isdigit():
             where = urllib.unquote(reverse_geo(where)).decode('utf8').replace("+"," ")
+        # print where
         date = request.form['date']
         thetime = request.form['thetime']
         # Brunch
@@ -165,7 +172,9 @@ def respond(chillid):
     host = "Justin Strauss"
     title = "Brunch"
     if request.method=='GET':
-        return render_template('respond.html',host=host, prefs=prefs, title=title)
+        foods = open('foods.txt').read()
+        foodlist = foods.split('\n')
+        return render_template('respond.html',host=host, prefs=prefs, title=title, foodlist=foodlist)
     else:
         what = request.form['what']
         if what == "":
@@ -184,9 +193,16 @@ def respond(chillid):
         ## get status returns true if none of the values in the dictionary are "pending", returns false otherwise
         #if status:
             ## whats = db.getwhats(chillid) -> a list of lists of food preferences ex. [['Brunch','Mexican'],['Brunch']]
+            whats = [['Brunch','Mexican'],['Brunch']]
             ## wheres = db.getwheres(chillid) -> a list of the requested locations
+            wheres = ["245 W 107th St New York, NY 10025","345 Chambers St, New York, NY 10282"]
+            for x in range(0,len(wheres)):
+                if not wheres[x][-7:].isdigit():
+                    wheres[x] = geo_loc(wheres[x])
+            print wheres
             ## people = db.getpeople(chillid) -> gets the host and invitees
-            ## restaurant_list = yelp.search(whats,wheres)
+            restaurant_list = yelp.search(whats,wheres)
+            print restaurant_list
 
             ## Something here taking the list of suggestions and picking one
         return redirect(url_for('index'))
@@ -201,6 +217,20 @@ def reverse_geo(latlong):
         address = urllib.quote_plus(address)
         return address
 
+def geo_loc(location):
+#finds the longitude and latitude of a given location parameter using Google's Geocode API
+#return format is a dictionary with longitude and latitude as keys
+    loc = urllib.quote_plus(location)
+    googleurl = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s" % (loc,"AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4")
+    request = urllib2.urlopen(googleurl)
+    results = request.read()
+    gd = json.loads(results) #dictionary
+    result_dic = gd['results'][0] #dictionary which is the first element in the results list
+    geometry = result_dic['geometry'] #geometry is another dictionary
+    loc = geometry['location'] #yet another dictionary
+    retstr = str(loc["lat"])+","+str(loc["lng"])
+    return retstr
+
 @app.route('/summary/<chillid>', methods=['GET','POST'])
 @login_required
 def summary(chillid):
@@ -213,25 +243,6 @@ def summary(chillid):
     else:
         origin = request.form['origin']
         return render_template('summary.html', finalplan=finalplan, imgurl=imgurl, origin=origin)
-
-# @app.route('/create', methods=['GET','POST'])
-# #@login_required
-# def create():
-#     if request.method=='GET':
-#         return render_template("create.html")
-#     search = request.form['activityEntry']
-#     cll = request.form['locationEntry']
-#     print cll
-#     session['search'] = search
-#     session['cll'] = cll
-#     if (cll == None or search == None):
-#         return render_template("index.html")
-#     else:
-#         return redirect(url_for('results'))
-
-# @app.route('/results')
-# def results():
-#     return yelp.search(session.pop('search',None),session.pop('cll',None))
 
 if __name__ == '__main__':
     app.run()
