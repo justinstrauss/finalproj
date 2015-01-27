@@ -216,19 +216,19 @@ def get_invites_for_user(facebook_id):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     masterdict = {}
-    masterdict['pending'] = []
-    masterdict['ready'] = []
-    masterdict['needsapproval'] = []
+    masterdict['pending'] = {}
+    masterdict['ready'] = {}
+    masterdict['needsapproval'] = {}
     for row in c.execute("select invite_id from userinvitematch where facebook_id=='" + facebook_id + "'"):
         invite_title = get_invite_title(row[0])
         invite_id = row[0]
         package = [invite_id, invite_title]
         if (see_if_finalized(invite_id)):
-            masterdict['ready'].append(package)
+            masterdict['ready'][invite_title] = invite_id
         elif (see_if_everyone_responded(invite_id)):
-            masterdict['needsapproval'].append(package)
+            masterdict['needsapproval'][invite_title] = invite_id
         else:
-            masterdict['pending'].append(package)
+            masterdict['pending'][invite_title] = invite_id
     conn.commit()
     conn.close()
     return masterdict
