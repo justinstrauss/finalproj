@@ -1,6 +1,5 @@
 {% extends "base.html" %}
   {% block bodycontent %}
-<h1> Create New Chill </h1>
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -9,7 +8,7 @@
 
 <script>
   $(function() {
-    var availableTags = 
+    var availableTags =
     {% if friends==[] %}
     [
       "Justin Strauss",
@@ -25,7 +24,7 @@
     function extractLast( term ) {
       return split( term ).pop();
     }
- 
+
     $( "#who" )
       // don't navigate away from the field on tab when selecting an item
       .bind( "keydown", function( event ) {
@@ -62,7 +61,7 @@
 
   <script>
   $(function() {
-    var availableTags = 
+    var availableTags =
       {{foodlist|safe}};
     function split( val ) {
       return val.split( /,\s*/ );
@@ -70,7 +69,7 @@
     function extractLast( term ) {
       return split( term ).pop();
     }
- 
+
     $( "#what" )
       // don't navigate away from the field on tab when selecting an item
       .bind( "keydown", function( event ) {
@@ -169,26 +168,29 @@
   });
   </script>
 
-<form class="pure-form pure-form-aligned" method="POST">
+  <div class="container-fluid">
+    <div class="row-fluid">
+
+<form method="POST">
     <fieldset>
         <div class="pure-control-group">
             <label for="title">Title your Chill</label>
-            <input class="pure-input-2-3" id="title" type="text" placeholder="ex. 'Weekend Birthday Brunch'" name="title">
+            <input class="span3" id="title" type="text" placeholder="ex. 'Weekend Birthday Brunch'" name="title">
         </div>
 
         <div class="pure-control-group">
             <label for="who">WHO do you want to invite? </label>
-            <input class="pure-input-2-3" id="who" type="text" placeholder="select from Facebook friends who also use Convenio" name="who">
+            <input class="span3" id="who" type="text" placeholder="select from Facebook friends who also use Convenio" name="who">
         </div>
 
         <div class="pure-control-group">
             <label for="what">WHAT type of food do you prefer? </label>
-            <input class="pure-input-2-3" id="what" type="text" placeholder="default set to preferences, type in other food if desired" name="what">
+            <input class="span3" id="what" type="text" placeholder="default set to preferences, type in other food if desired" name="what">
         </div>
 
         <div class="pure-control-group">
             <label for="where">WHERE do you want to meet? </label>
-            <input class="pure-input-2-3" id="where" type="text" placeholder="default set to current location shown below, type in other location if desired" name="where">
+            <input class="span3" id="where" type="text" placeholder="default set to current location shown below, type in other location if desired" name="where">
         </div>
 
         <div id="mapholder">
@@ -216,12 +218,12 @@ getLocation();
 
         <div class="pure-control-group">
             <label for="when">WHEN do you want to meet? </label>
-            <input class="pure-input-1-3" id="date" type="text" placeholder="select a date" name="date">
-            <input class="pure-input-1-3" id="thetime" type="text" placeholder="select a time" name="thetime">
+            <input class="span3" id="date" type="text" placeholder="select a date" name="date">
+            <input class="span3" id="thetime" type="text" placeholder="select a time" name="thetime">
         </div>
 
         <div class="pure-controls">
-            <button type="submit" name="b" value="Create" class="pure-button pure-button-primary">Create</button>
+            <button type="submit" name="b" value="Create" class="btn btn-primary">Create</button>
         </div>
     </fieldset>
 </form>
@@ -248,5 +250,7 @@ x.value = latlon;
 }
 getLocation();
 </script>
+</div>
+</div>
 
   {% endblock bodycontent %}
