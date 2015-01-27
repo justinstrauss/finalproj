@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+  {% block bodycontent %}
+
+<h1> Chill Approval </h1>
+
+<b>{{needsapproval[0]}}</b>
+<i>with</i> {% for x in needsapproval[1] %} {{x}}, {% endfor %} <br><br>
+
+<form class="pure-form pure-form-aligned" method="POST">
+    <fieldset>
+
+    <b>Choose the final restaurant:</b> <br>
+    (our algorithm makes suggestions based on restaurants near a midpoint location that satisfy the guests' cuisine preferences)
+
+    {% for x in range(0,5) %}
+    <label for="option-{{x}}" class="pure-radio">
+        <input id="option-{{x}}" type="radio" name="restRadios" value="option{{x}}">
+        <a href="{{needsapproval[2][x]['website']}}">{{needsapproval[2][x]['name']}}</a>
+        <img src="{{needsapproval[2][x]['rating_image']}}"><br>
+        <iframe width="400" height="300" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?q={{needsapproval[2][x]['address'][0]}}&key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4" ></iframe><br><br>
+    </label>
+
+    {% endfor %}
+
+    <b>Choose the final time:</b> <br>
+    (theses are all the dates and times your guests suggested)
+
+        {% for x in range(0,numtimes) %}
+    <label for="option-{{x}}" class="pure-radio">
+        <input id="option-{{x}}" type="radio" name="timeRadios" value="option{{x}}">
+        {{needsapproval[3][x]}} at {{needsapproval[4][x]}}
+    </label>
+
+    {% endfor %}
+
+        <div class="pure-controls">
+            <button type="submit" name="b" value="Create" class="pure-button pure-button-primary">Approve</button>
+        </div>
+    </fieldset>
+</form>
+
+  {% endblock bodycontent %}

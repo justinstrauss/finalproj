@@ -26,11 +26,11 @@ def setup():
 	db.chills.drop()
 
 	chills = []
-	# [name, id, chillersdict[], final plan]
+	# [name, id, chillersdict[], needsapproval info, final plan]
 	# chillers is a dictionary: keys are the id's of the users that are invited, value is "pending" if they haven't filled out the response form or if they have, it's a list of their preferences
 	# preferences list [what, where, date, time]
 	# first person in chillers dict is the host
-	chills.append(["Regents Week Lunch","1",{"100001767295555":[["American","Mexican"],"Tribeca, New York, NY, United States","1/30/2015","3:00pm"],"100001958141644":"pending"}, []])
+	chills.append(["Regents Week Lunch","1",{"100001767295555":[["American","Mexican"],"Tribeca, New York, NY, United States","1/30/2015","3:00pm"],"100001958141644":"pending"}, [], []])
 
 	dlist = []
 	for i in range(len(chills)):
