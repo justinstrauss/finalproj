@@ -5,7 +5,6 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
 
 <script>
   $(function() {
@@ -230,7 +229,7 @@ getLocation();
 <script type="text/javascript">
   var input = document.getElementById('where');
 var options = {componentRestrictions: {country: 'us'}};
-new google.maps.places.Autocomplete(input, options);e
+new google.maps.places.Autocomplete(input, options);
 </script>
 
 <script>
@@ -247,6 +246,11 @@ var latlon = position.coords.latitude + "," + position.coords.longitude;
 x.value = latlon;
 }
 getLocation();
+</script>
+
+<script>
+var n = document.getElementById("what");
+n.value = "{{food}}";
 </script>
 
   {% endblock bodycontent %}

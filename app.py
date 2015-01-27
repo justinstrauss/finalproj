@@ -47,7 +47,6 @@ def index():
     if "id" not in session:
         session["name"] = None
         session['id'] = None
-        session['email'] = None
         return render_template("about.html")
     else:
         ## pending = db.findpending(session['id'])
@@ -77,11 +76,14 @@ def facebook_authorized(resp):
     session['oauth_token'] = (resp['access_token'], '')
     session['token'] = resp['access_token']
     me = facebook.get('/me')
-    print me.data
     session['name'] = me.data['name']
     session['id'] = me.data['id']
-    # session['email'] = me.data['email']
+    if not db.userexists(session['id']):
+        db.adduser(session['name'],session['id'])
+        flash("Since you are a new user, please update your food preferences.")
+        return redirect(url_for('account'))
     return redirect(url_for('index'))
+
     
 @facebook.tokengetter
 def get_facebook_oauth_token():
@@ -91,7 +93,6 @@ def get_facebook_oauth_token():
 def logout():
     session.pop('name', None)
     session.pop('id', None)
-    session.pop('email', None)
     return redirect(url_for('index'))
 
 @app.route('/account', methods=['GET','POST'])
@@ -101,7 +102,7 @@ def account():
         foods = open('foods.txt').read()
         foodlist = foods.split('\n')
         food = db.getfood(session['id'])
-        return render_template("account.html",name=session['name'], email=session["email"], foodlist=foodlist, preferences=food)
+        return render_template("account.html",name=session['name'], foodlist=foodlist, preferences=food)
     else:
         preferences = request.form["what"]
         preflist = [str(x) for x in preferences[:-2].split(',')]
@@ -119,7 +120,6 @@ def create():
         # print foodlist
 
         fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
-        print fburl
         req = urllib2.urlopen(fburl)
         result = req.read()
         d = json.loads(result)
@@ -128,13 +128,15 @@ def create():
         friendslist = d['data']
         friends = [str(x["name"]) for x in friendslist]
         # print friends
-        return render_template("create.html", friends=friends, foodlist=foodlist)
+        food = db.getfood(session['id'])
+        foodstr = ""
+        for x in food:
+            foodstr += x+","
+        return render_template("create.html", friends=friends, foodlist=foodlist, food=foodstr)
     else:
         title = request.form['title']
         who = request.form['who']
         what = request.form['what']
-        if what == "":
-            what = db.getfood(session['id'])
         where = request.form['where']
         if where[:1].isdigit():
             where = urllib.unquote(reverse_geo(where)).decode('utf8').replace("+"," ")
@@ -164,8 +166,11 @@ def respond(chillid):
     #     prefs[1] = urllib.unquote(reverse_geo(prefs[1])).decode('utf8').replace("+"," ")
     host = "Justin Strauss"
     title = "Brunch"
+
     if request.method=='GET':
-        return render_template('respond.html',host=host, prefs=prefs, title=title)
+        foods = open('foods.txt').read()
+        foodlist = foods.split('\n')
+        return render_template('respond.html',host=host, prefs=prefs, title=title, foodlist=foodlist)
     else:
         what = request.form['what']
         if what == "":
