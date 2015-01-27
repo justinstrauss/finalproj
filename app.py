@@ -12,12 +12,8 @@ import yelp
 import facebook
 
 ##FACEBOOK GRAPH API
-FACEBOOK_APP_ID = '188477911223606'
-FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
-
-client_id = "935483263159079"
-client_secret = "ce39cb172d25891be741905badf002e9"
-# access_token  = "935483263159079|7EyHz4GRI92YiJxik2E-91MuW1o"
+FACEBOOK_APP_ID = "935483263159079"
+FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
 
 app = Flask(__name__)
 db.setup()
@@ -81,9 +77,10 @@ def facebook_authorized(resp):
     session['oauth_token'] = (resp['access_token'], '')
     session['token'] = resp['access_token']
     me = facebook.get('/me')
+    print me.data
     session['name'] = me.data['name']
     session['id'] = me.data['id']
-    session['email'] = me.data['email']
+    # session['email'] = me.data['email']
     return redirect(url_for('index'))
     
 @facebook.tokengetter
@@ -122,6 +119,7 @@ def create():
         # print foodlist
 
         fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
+        print fburl
         req = urllib2.urlopen(fburl)
         result = req.read()
         d = json.loads(result)
@@ -186,19 +184,11 @@ def respond(chillid):
         ## get status returns true if none of the values in the dictionary are "pending", returns false otherwise
         #if status:
             ## whats = db.getwhats(chillid) -> a list of lists of food preferences ex. [['Brunch','Mexican'],['Brunch']]
-            # alltheoptions = []
-            # for x in whats:
-            #     for y in x:
-            #         alltheoptions.append(y)
-            ## finalwhat = tally(alltheoptions) -> returns the option with the most votes
-            # ex. if alltheoptions is ['Brunch','Mexican','Brunch'], then brunch would win
             ## wheres = db.getwheres(chillid) -> a list of the requested locations
-            ## midpoint = yelp.getmidpoint(wheres) -> takes a list and returns the midpoint location
             ## people = db.getpeople(chillid) -> gets the host and invitees
-            ## restname = yelp.getrestname(midpoint,finalwhat)
-            ## restaddress = yelp.getrestaddress(midpoint,finalwhat)
-            # finalplan = [db.gettitle(chillid), people, restname, restaddress, finaldate, finaltime]
-            ## db.setfinalplan(chillid, finalplan)
+            ## restaurant_list = yelp.search(whats,wheres)
+
+            ## Something here taking the list of suggestions and picking one
         return redirect(url_for('index'))
 
 def reverse_geo(latlong):
