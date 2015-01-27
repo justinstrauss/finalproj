@@ -2,3 +2,4 @@ flask
 gunicorn
 Flask-OAuth
 nginx
+pymongo
