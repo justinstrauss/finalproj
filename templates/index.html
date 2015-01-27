@@ -1,15 +1,26 @@
 {% extends "base.html" %}
   {% block bodycontent %}
 
-Welcome to Conven.io
-by Justin, Derek, Dennis, and Lev
+<h1> Convenio Dashboard </h1>
 
-<div id="demo">
+<div class="pure-g">
+  <div class="pure-u-1-24"></div>
+  <div class="pure-u-11-24">
+    
+    <b> Pending Chills: </b> <br>
+    Chills you've been invited to but haven't responded to <br><br>
 
-</div>
+    {% for key, value in pending.iteritems() %} <a href="/respond/{{value}}">{{key}}</a> {% endfor %}
 
-<div id="mapholder">
+    </div>
+  <div class="pure-u-11-24">
 
+    <b> Complete Chills: </b> <br>
+    Chills that are ready to be attended <br><br>
+
+    {% for key, value in ready.iteritems() %} <a href="/summary/{{value}}">{{key}}</a> {% endfor %}
+
+    </div>
 </div>
 
   {% endblock bodycontent %}

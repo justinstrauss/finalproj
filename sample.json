@@ -1,0 +1,42 @@
+{
+  "data": [
+    {
+      "name": "Miranda ChaiTea", 
+      "id": "10204019899670059"
+    }, 
+    {
+      "name": "Curtis Bezault", 
+      "id": "1167306834"
+    }, 
+    {
+      "name": "Raymond Zeng", 
+      "id": "1592085341"
+    }, 
+    {
+      "name": "Alex Libman", 
+      "id": "100000031272732"
+    }, 
+    {
+      "name": "Nicholas Glava", 
+      "id": "100000172750596"
+    }, 
+    {
+      "name": "Eric Zelikman", 
+      "id": "100000486695203"
+    }, 
+    {
+      "name": "Max Zhou", 
+      "id": "100000887541775"
+    }, 
+    {
+      "name": "Anya Hargil", 
+      "id": "100003068326869"
+    }
+  ], 
+  "paging": {
+    "next": "https://graph.facebook.com/v2.2/789389677796601/friends?limit=25&offset=25&__after_id=enc_Aez-ZPIrKWRrU51RjUtHIEGHIfm3VyXnaA813GaWHR7cBx2MHs-5_At6D_WRd-sYUURCxS-EHHKEP8Nu7cIzma5Z"
+  }, 
+  "summary": {
+    "total_count": 897
+  }
+}
