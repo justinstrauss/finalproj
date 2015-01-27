@@ -9,14 +9,14 @@ connection = pymongo.Connection()
 def setup():
 	#default to test
 	users = []
-	#[name,id,email,food preferences[]]
-	users.append(["Justin Strauss","100001767295555","justinianstrauss@gmail.com", ["American"], ["1"]])
-	users.append(["Lev Akabas","100001958141644","lakabas15@gmail.com", ["Italian"], ["1"]])
-	users.append(["Dennis Nenov","100000550963490", "nycdennen@gmail.com", ["Mexican"], []])
+	#[name,id,food preferences[],chillids[]]
+	users.append(["Justin Strauss","100001767295555", ["American"], ["1"]])
+	users.append(["Lev Akabas","100001958141644", ["Italian"], ["1"]])
+	users.append(["Dennis Nenov","100000550963490", ["Mexican"], []])
 
 	dlist = []
 	for i in range(len(users)):
-		d = {'name':users[i][0],'id':users[i][1], 'email':users[i][2], 'food':users[i][3], 'chills':users[i][4]}
+		d = {'name':users[i][0],'id':users[i][1], 'food':users[i][2], 'chills':users[i][3]}
 		dlist.append(d)
 	db = connection['convenio']
 	db.convenio.insert(dlist)
@@ -108,9 +108,9 @@ def getprofile(fbid):
 # 	db = conn['convenio']
 # 	db.convenio.update({'name':username},{'$set':{'pw':newpw}})
 
-def adduser(username,fbid,email):
+def adduser(username,fbid):
 	db = connection['convenio']
-	db.convenio.insert([{'name':username,'id':fbid, 'email':email, 'food':[], "chills":[]}])
+	db.convenio.insert([{'name':username,'id':fbid, 'food':[], "chills":[]}])
 
 def getfood(fbid):
 	return getprofile(fbid)[0]['food']
