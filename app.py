@@ -2,7 +2,7 @@
 # Software Development Period 7
 # Final Project
 
-import db
+import database
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from flask_oauth import OAuth
 from functools import wraps
@@ -20,7 +20,6 @@ FACEBOOK_APP_ID = '188477911223606'
 FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
 
 app = Flask(__name__)
-db.setup()
 app.secret_key = "don't store this on github"
 app.debug = True
 oauth = OAuth()
@@ -53,14 +52,10 @@ def index():
         session['id'] = None
         return render_template("about.html")
     else:
-        ## pending = db.findpending(session['id'])
-        ## returns a dictionary of pending chills for that user, keys are titles, values are chill id's
-        ## ready = db.findready(session['id'])
-        ## returns a dictionary of ready chills for that user, keys are titles, values are chill id's
-        pending = {"Brunch":"2"}
-        ready = {"Regents Week Lunch":"1"}
-        needsapproval = {"Party":"3"}
-        # needsapproval = db.findneedsapproval(session['id'])
+        inviteDict = database.get_invites_for_user(session['id'])
+        pending = inviteDict['pending']
+        needsapproval = inviteDict['needsapproval']
+        ready = inviteDict['ready']
         return render_template("index.html", pending=pending, ready=ready, needsapproval=needsapproval)
 
 @app.route('/login')
@@ -82,8 +77,8 @@ def facebook_authorized(resp):
     me = facebook.get('/me')
     session['name'] = me.data['name']
     session['id'] = me.data['id']
-    if not db.userexists(session['id']):
-        db.adduser(session['name'],session['id'])
+    if not database.user_exists(session['id']):
+        database.add_user(session['name'],session['id'])
         flash("Since you are a new user, please update your food preferences.")
         return redirect(url_for('account'))
     return redirect(url_for('index'))
@@ -105,13 +100,12 @@ def account():
     if request.method=='GET':
         foods = open('foods.txt').read()
         foodlist = foods.split('\n')
-        food = db.getfood(session['id'])
+        food = ",".join(databse.get_user_food_preferences(session['id']))
         return render_template("account.html",name=session['name'], foodlist=foodlist, preferences=food)
     else:
         preferences = request.form["what"]
         preflist = [str(x) for x in preferences[:-2].split(',')]
-        # print preflist
-        db.updatefood(session['id'],preflist)
+        database.update_user_food_preferences(session['id'],preflist)
         flash("Your food preferences have been updated.")
         return redirect(url_for('index'))
 
@@ -132,30 +126,25 @@ def create():
         friendslist = d['data']
         friends = [str(x["name"]) for x in friendslist]
         # print friends
-        food = db.getfood(session['id'])
+        food = database.get_user_food_preferences(session['id'])
         foodstr = ""
         for x in food:
             foodstr += x+","
         return render_template("create.html", friends=friends, foodlist=foodlist, food=foodstr)
     else:
         title = request.form['title']
+        ### fix this--you need a list of IDs###
         who = request.form['who']
+        friendlist= []
         what = request.form['what']
+        preflist = [str(x) for x in preferences[:-2].split(',')]
         where = request.form['where']
         if where[-7:].isdigit():
             where = urllib.unquote(reverse_geo(where)).decode('utf8').replace("+"," ")
         # print where
         date = request.form['date']
         thetime = request.form['thetime']
-        # Brunch
-        # Lev Akabas, Dennis Nenov, 
-        # Breakfast & Brunch, 
-        # 40.720997499999996,-73.8477874
-        # 01/27/2015
-        # 11:30am
-        ##db.addchill(session['id'], title, who, what, where, date, time)
-        ##chills.append(["Brunch","2",{"100001767295555":[["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"],"100001958141644":"pending", "100000550963490":"pending"}, [], []])
-        ##adds chill to the chill database table, 2nd element id is chill.length+1
+        database.add_invite(title, session['id'], friendlist, preflist, where, thetime, date) 
         return redirect(url_for('index'))
 
 @app.route('/respond/<chillid>', methods=['GET','POST'])
