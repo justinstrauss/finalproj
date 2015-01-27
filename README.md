@@ -26,18 +26,15 @@ Once everyone invited to a Chill has completed their response form, our applicat
 
 - [Python](https://www.python.org/) and [Flask](http://flask.pocoo.org/) for basic app backbone  
 - [Flask-OAuth](https://pythonhosted.org/Flask-OAuth/) for easy Facebook login within the microframework  
-- [Login Required Decorator](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/) for easy authentication
+- [Login Required Decorator](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/) for easy authentication  
 - [List Comprehensions](https://docs.python.org/2/tutorial/datastructures.html) for code simplicity  
-
 - [Digital Ocean](https://www.digitalocean.com/) for droplet deployment  
-- [Gunicorn](http://gunicorn.org/) as a WSGI server
-- [nginx](http://nginx.org/) as a reverse proxy to the Gunicorn server 
-- [FreeDNS](http://freedns.afraid.org/) for web hosting
-
+- [Gunicorn](http://gunicorn.org/) as a WSGI server  
+- [nginx](http://nginx.org/) as a reverse proxy to the Gunicorn server  
+- [FreeDNS](http://freedns.afraid.org/) for web hosting  
 - [Facebook Graph API](https://developers.facebook.com/docs/graph-api) for connecting with friends  
 - [Yelp API](http://www.yelp.com/developers/documentation) for restaurant searches  
 - [Google Maps API](https://developers.google.com/maps/) for directions and geolocation  
-
 - [Pure CSS](http://purecss.io/) for CSS styling  
 - [JQuery](http://jquery.com/) for interactive form widgets  
 - [SQLite](http://www.sqlite.org/) for database storage  
