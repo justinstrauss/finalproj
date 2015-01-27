@@ -1,3 +1,7 @@
+# Justin Strauss, Lev Akabas, Derek Tsui, Dennis Nenov
+# Software Development Period 7
+# Final Project
+
 from flask import Flask, redirect, url_for, session, request
 from flask_oauth import OAuth
 
