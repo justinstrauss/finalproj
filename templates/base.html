@@ -18,7 +18,7 @@
     <a href="/" class="pure-menu-heading">{% if session['name']==None %} Convenio {% else %} Welcome {{session['name']}} {% endif %}</a>
 
     <ul>
-        <li><a href="/">Home</a></li>
+        <li><a href="/index">Home</a></li>
         <li><a href="/create">Create New Chill</a></li>
         <li><a href="/account">My Account</a></li>
         {% if session['name']==None %}
