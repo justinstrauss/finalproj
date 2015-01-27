@@ -28,7 +28,6 @@ Features:
 - [Python](https://www.python.org/) and [Flask](http://flask.pocoo.org/) for basic app backbone  
 - [Flask-OAuth](https://pythonhosted.org/Flask-OAuth/) for easy Facebook login within the microframework  
 - [Login Required Decorator](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/) for easy authentication
-- [Twitter Bootstrap](http://getbootstrap.com/) for CSS styling  
 - [Pure CSS](http://purecss.io/) for CSS styling  
 - [List Comprehensions](https://docs.python.org/2/tutorial/datastructures.html) for code simplicity  
 - [Digital Ocean](https://www.digitalocean.com/) for droplet deployment  
@@ -36,7 +35,6 @@ Features:
 - [Yelp API](http://www.yelp.com/developers/documentation) for restaurant searches  
 - [Google Maps API](https://developers.google.com/maps/) for directions and geolocation  
 - [JQuery](http://jquery.com/) for interactive form widgets  
-- [SQLite](http://www.sqlite.org/) for database storage  
 - [MongoDB](http://www.mongodb.org/) for database storage  
 - [Google Places](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete) for location autocompletion  
 
