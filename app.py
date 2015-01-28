@@ -11,13 +11,13 @@ import yelp
 #in the virtual env: $pip install facebook-sdk
 import facebook
 
-##FACEBOOK GRAPH API: use these if running on serve
-# FACEBOOK_APP_ID = "935483263159079"
-# FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
+##FACEBOOK GRAPH API: use these if running on server
+FACEBOOK_APP_ID = "935483263159079"
+FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
 
 ##FACEBOOK GRAPH API: use these if running on localhost
-FACEBOOK_APP_ID = '188477911223606'
-FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
+#FACEBOOK_APP_ID = '188477911223606'
+#FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
 
 app = Flask(__name__)
 app.secret_key = "don't store this on github"
