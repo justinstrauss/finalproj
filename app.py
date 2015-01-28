@@ -192,13 +192,16 @@ def respond(chillid):
 @app.route('/approve/<chillid>', methods=['GET','POST'])
 @login_required
 def approve(chillid):
-    whats = database.get_invite_food_preference(chillid)
+    whats = database.get_invite_food_preferences(chillid)
     invitePref = database.get_invite_preferences(chillid)
     wheres = invitePref['location']
     for x in range(0,len(wheres)):
         if not wheres[x][-7:].isdigit():
             wheres[x] = geo_loc(wheres[x])
-    people = database.get_invitees(chillid)
+    peoplelist = database.get_invitees(chillid)
+    people = []
+    for person in peoplelist:
+        people.append(database.get_user_name(person))
     restaurant_list = yelp.search(whats,wheres)
     datelist = invitePref['date']
     timelist = invitePref['time']
@@ -245,7 +248,10 @@ def geo_loc(location):
 def summary(chillid):
     finalplanDict = database.get_invite_dict(chillid)
     inviteeList = database.get_invitees(chillid)
-    finalplan = [finalplanDict['title'], inviteeList, finalPlanDict['location'], finalPlanDict['date'], finalPlanDict['time']]
+    people = []
+    for person in inviteeList:
+        people.append(database.get_user_name(person))
+    finalplan = [finalplanDict['title'], people, finalplanDict['location'], finalplanDict['date'], finalplanDict['time']]
     imgurl = "https://www.google.com/maps/embed/v1/place?q="+finalplan[3]+"&key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4"
     if request.method=='GET':
         return render_template('summary.html', finalplan=finalplan, imgurl=imgurl, origin=None)
