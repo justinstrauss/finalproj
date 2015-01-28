@@ -250,6 +250,3 @@ def test():
     #print(cursor.fetchall())
     cursor.execute("SELECT * FROM inviteprefmatch")
     #print(cursor.fetchall())
-
-if __name__ == '__main__':
-    create_db()
