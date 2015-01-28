@@ -100,7 +100,7 @@ def account():
     if request.method=='GET':
         foods = open('foods.txt').read()
         foodlist = foods.split('\n')
-        food = ",".join(databse.get_user_food_preferences(session['id']))
+        food = ",".join(database.get_user_food_preferences(session['id']))
         return render_template("account.html",name=session['name'], foodlist=foodlist, preferences=food)
     else:
         preferences = request.form["what"]
@@ -112,20 +112,30 @@ def account():
 @app.route('/create', methods=['GET','POST'])
 @login_required
 def create():
+    fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
+    req = urllib2.urlopen(fburl)
+    result = req.read()
+    d = json.loads(result)
+    # a = open('sample.json').read()
+    # d = json.loads(a)
+    friendslist = d['data']
+    if friendslist == []:
+        friends = ["Justin Strauss","Lev Akabas","Dennis Nenov"]
+        friendids = ["100001767295555","100001958141644","100000550963490"]
+    else:
+        friends = [str(x["name"]) for x in friendslist]
+        friendids = [str(x["id"]) for x in friendslist]
+    frienddict = []
+    for x in range(0,len(friends)):
+        frienddict.append((friends[x],friendids[x]))
+    frienddict = dict(frienddict)
+    # print frienddict['Dennis Nenov']
     if request.method=='GET':
         foods = open('foods.txt').read()
         foodlist = foods.split('\n')
         # print foodlist
 
-        fburl = "https://graph.facebook.com/v2.2/me/friends?access_token=" + urllib.quote_plus(str((session["token"])))
-        req = urllib2.urlopen(fburl)
-        result = req.read()
-        d = json.loads(result)
-        # a = open('sample.json').read()
-        # d = json.loads(a)
-        friendslist = d['data']
-        friends = [str(x["name"]) for x in friendslist]
-        # print friends
+        # print friendids
         food = database.get_user_food_preferences(session['id'])
         foodstr = ""
         for x in food:
@@ -143,6 +153,7 @@ def create():
         # print where
         date = request.form['date']
         thetime = request.form['thetime']
+        friendlist = [frienddict[x.strip()] for x in friendlist]
         database.add_invite(title, session['id'], friendlist, preflist, where, thetime, date) 
         return redirect(url_for('index'))
 

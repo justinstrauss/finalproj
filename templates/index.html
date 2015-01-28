@@ -10,13 +10,13 @@
     <b> Pending Chills </b> <br>
     Chills you've been invited to but haven't responded to: <br><br>
 
-    {% for key, value in pending.iteritems() %} <a href="/respond/{{value}}">{{key}}</a> {% endfor %}
+    {% for key, value in pending.iteritems() %} <a href="/respond/{{value}}">{{key}}</a><br> {% endfor %}
 
     <br><br>
 
     Chills you've created and need to approve: <br><br>
 
-    {% for key, value in needsapproval.iteritems() %} <a href="/approve/{{value}}">{{key}}</a> {% endfor %}
+    {% for key, value in needsapproval.iteritems() %} <a href="/approve/{{value}}">{{key}}</a><br> {% endfor %}
 
     </div>
   <div class="pure-u-11-24">
@@ -24,7 +24,7 @@
     <b> Complete Chills </b> <br>
     Chills that are ready to be attended: <br><br>
 
-    {% for key, value in ready.iteritems() %} <a href="/summary/{{value}}">{{key}}</a> {% endfor %}
+    {% for key, value in ready.iteritems() %} <a href="/summary/{{value}}">{{key}}</a><br> {% endfor %}
 
     </div>
 </div>

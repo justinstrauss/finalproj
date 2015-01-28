@@ -9,15 +9,7 @@
 <script>
   $(function() {
     var availableTags = 
-    {% if friends==[] %}
-    [
-      "Justin Strauss",
-      "Lev Akabas",
-      "Dennis Nenov"
-    ];
-    {% else %}
       {{friends|safe}};
-    {% endif %}
     function split( val ) {
       return val.split( /,\s*/ );
     }
