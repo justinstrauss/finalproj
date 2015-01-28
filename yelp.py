@@ -48,6 +48,8 @@ def search(keywords, lls):
             points += (dict["rating"] - 1) * 4
         # Takes into account the number of people who chose the cuisine offered at the location. 40 points for all cuisine choices being that cuisine #                            
             number = 0
+            if "categories" not in dict:
+                dict["categories"] = []
             for category in dict["categories"]:
                 if category[0] in frequencies.keys():
                     number += frequencies[category[0]] * 40 / len(keywords)
