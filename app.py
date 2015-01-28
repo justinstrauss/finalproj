@@ -11,13 +11,9 @@ import yelp
 #in the virtual env: $pip install facebook-sdk
 import facebook
 
-##FACEBOOK GRAPH API: use these if running on server
+##FACEBOOK GRAPH API
 FACEBOOK_APP_ID = "935483263159079"
 FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
-
-##FACEBOOK GRAPH API: use these if running on localhost
-#FACEBOOK_APP_ID = '188477911223606'
-#FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
 
 app = Flask(__name__)
 app.secret_key = "don't store this on github"
@@ -31,7 +27,7 @@ facebook = oauth.remote_app('facebook',
     authorize_url='https://www.facebook.com/dialog/oauth',
     consumer_key=FACEBOOK_APP_ID,
     consumer_secret=FACEBOOK_APP_SECRET,
-    request_token_params={'scope': 'email'}
+    request_token_params={'scope': 'user_friends'}
 )
 
 def login_required(f):
@@ -64,6 +60,7 @@ def login():
     next=request.args.get('next') or request.referrer or None,
     _external=True))
 
+
 @app.route('/login/authorized')
 @facebook.authorized_handler
 def facebook_authorized(resp):
@@ -92,6 +89,7 @@ def get_facebook_oauth_token():
 def logout():
     session.pop('name', None)
     session.pop('id', None)
+    session.pop('token', None)
     return redirect(url_for('index'))
 
 @app.route('/account', methods=['GET','POST'])
