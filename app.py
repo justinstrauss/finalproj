@@ -12,12 +12,12 @@ import yelp
 import facebook
 
 ##FACEBOOK GRAPH API: use these if running on serve
-FACEBOOK_APP_ID = "935483263159079"
-FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
+# FACEBOOK_APP_ID = "935483263159079"
+# FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
 
 ##FACEBOOK GRAPH API: use these if running on localhost
-# FACEBOOK_APP_ID = '188477911223606'
-# FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
+FACEBOOK_APP_ID = '188477911223606'
+FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
 
 app = Flask(__name__)
 app.secret_key = "don't store this on github"
@@ -129,7 +129,6 @@ def create():
     for x in range(0,len(friends)):
         frienddict.append((friends[x],friendids[x]))
     frienddict = dict(frienddict)
-    # print frienddict['Dennis Nenov']
     if request.method=='GET':
         foods = open('foods.txt').read()
         foodlist = foods.split('\n')
@@ -144,7 +143,6 @@ def create():
     else:
         title = request.form['title']
         who = request.form['who']
-        friendlist= [str(x) for x in who[:-2].split(',')]
         what = request.form['what']
         preflist = [str(x) for x in what[:-2].split(',')]
         where = request.form['where']
@@ -153,29 +151,26 @@ def create():
         # print where
         date = request.form['date']
         thetime = request.form['thetime']
-        friendlist = [frienddict[x.strip()] for x in friendlist]
+        friendlist = [frienddict[x.strip()] for x in friends]
         database.add_invite(title, session['id'], friendlist, preflist, where, thetime, date) 
         return redirect(url_for('index'))
 
 @app.route('/respond/<chillid>', methods=['GET','POST'])
 @login_required
 def respond(chillid):
-    ## prefs = db.gethostprefs(chillid)
-    ## for example, it would return [["Breakfast & Brunch"],"40.720997499999996,-73.8477874","1/27/2015","11:30am"]
-    ## host = db.gethost(chillid)
-    ## host will return Justin Strauss
-    ## title = db.gettitle(chillid)
-    prefs = [["Breakfast & Brunch"],"69-50 Austin Street, Flushing, NY 11366, USA","1/27/2015","11:30am"]
+    prefDict = database.get_host_preferences(chillid)
+    prefs = [prefDict['food'],prefDict['location'], prefDict['date'], prefDict['time']]
     # if prefs[1][:1].isdigit():
     #     prefs[1] = urllib.unquote(reverse_geo(prefs[1])).decode('utf8').replace("+"," ")
-    host = "Justin Strauss"
-    title = "Brunch"
+    host = database.get_host_name(chillid)
+    title = database.get_invite_title(chillid)
     if request.method=='GET':
         foods = open('foods.txt').read()
         foodlist = foods.split('\n')
         return render_template('respond.html',host=host, prefs=prefs, title=title, foodlist=foodlist)
     else:
         what = request.form['what']
+        what = [str(x) for x in what[:-2].split(',')]
         if what == "":
             what = prefs[0]
         where = request.form['where']
@@ -187,34 +182,23 @@ def respond(chillid):
         thetime = request.form['thetime']
         if thetime == "":
             thetime = prefs[3]
-        ## db.addresponse(chillid,session['id'],what,where,date,time)
-        ## status = db.getstatus(chillid)
-        ## get status returns true if none of the values in the dictionary are "pending", returns false otherwise
-        #if status:
-            ## whats = db.getwhats(chillid) -> a list of lists of food preferences ex. [['Brunch','Mexican'],['Brunch']]
-            whats = [['Brunch','Mexican'],['Brunch']]
-            ## wheres = db.getwheres(chillid) -> a list of the requested locations
-            wheres = ["245 W 107th St New York, NY 10025","345 Chambers St, New York, NY 10282"]
-            for x in range(0,len(wheres)):
-                if not wheres[x][-7:].isdigit():
-                    wheres[x] = geo_loc(wheres[x])
-            #print wheres
-            ## people = db.getpeople(chillid) -> gets the host and invitees
-            restaurant_list = yelp.search(whats,wheres)
-            # print restaurant_list
-            # needsapproval = [db.gettitle(chillid), people, restaurant_list, datelist, timelist]
-            ## db.setneedsapproval(chillid, needsapproval)
+        database.add_user_preferences(chillid,session['id'],where,thetime,date,what)
         return redirect(url_for('index'))
 
 @app.route('/approve/<chillid>', methods=['GET','POST'])
 @login_required
 def approve(chillid):
-    ## needsapproval = db.getneedsapproval(chillid)
-    needsapproval = ['Party', ['Justin Strauss','Derek Tsui'], [{'website': u'http://www.yelp.com/biz/al-horno-lean-mexican-kitchen-new-york', 'name': u'Al Horno Lean Mexican Kitchen', 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'417 W 47th St']}, {'website': u'http://www.yelp.com/biz/hells-kitchen-new-york-2', 'name': u"Hell's Kitchen", 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'679 9th Ave']}, {'website': u'http://www.yelp.com/biz/taqueria-tehuitzingo-new-york', 'name': u'Taqueria Tehuitzingo', 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'578 9th Ave']}, {'website': u'http://www.yelp.com/biz/ponche-taqueria-and-cantina-new-york', 'name': u'Ponche Taqueria & Cantina', 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'420 W 49th St']}, {'website': u'http://www.yelp.com/biz/toloache-new-york-2', 'name': u'Toloache', 'rating_image': u'http://s3-media4.fl.yelpcdn.com/assets/2/www/img/c2f3dd9799a5/ico/stars/v1/stars_4.png', 'address': [u'251 W 50th St']}], ["1/27/2015","1/27/2015"], ['1:30pm','2:00pm']]
-    # addresses = []
-    # for x in range(0,4):
-    #     addresses.append(str(needsapproval[2][x]['address'][0]))
-    # print addresses
+    whats = database.get_invite_food_preference(chillid)
+    invitePref = database.get_invite_preferences(chillid)
+    wheres = invitePref['location']
+    for x in range(0,len(wheres)):
+        if not wheres[x][-7:].isdigit():
+            wheres[x] = geo_loc(wheres[x])
+    people = database.get_invitees(chillid)
+    restaurant_list = yelp.search(whats,wheres)
+    datelist = invitePref['date']
+    timelist = invitePref['time']
+    needsapproval = [database.get_invite_title(chillid), people, restaurant_list, datelist, timelist]
     if request.method=='GET':
         return render_template('approve.html', needsapproval=needsapproval, numtimes=len(needsapproval[3]))
     else:
@@ -224,12 +208,7 @@ def approve(chillid):
         restaurantaddress = needsapproval[2][int(rest[-1:])]['address'][0]
         finaldate = needsapproval[3][int(time[-1:])]
         finaltime = needsapproval[4][int(time[-1:])]
-        # print restaurantname
-        # print restaurantaddress
-        # print finaldate
-        # print finaltime
-        # finalplan = [needsapproval[0], needsapproval[1], restaurantname, restaurantaddress, finaldate, finaltime]
-        ## db.setfinalplan(chillid, finalplan)
+        database.set_final_plan(chillid, restaurantaddress, finaltime, finaldate)
         return redirect(url_for('index'))
 
 
@@ -260,10 +239,9 @@ def geo_loc(location):
 @app.route('/summary/<chillid>', methods=['GET','POST'])
 @login_required
 def summary(chillid):
-    ## finalplan = db.getfinalplan(chillid)
-    ## returns the final element of the chill list
-    finalplan = ["Regents Week Lunch",["Justin Strauss","Dennis Nenov", "Lev Akabas"], "American Flatbread New York, NY", "205 Hudson Street, New York, NY 10013", "1/30/2015","3:00pm"]
-    # print finalplan[3]
+    finalplanDict = database.get_invite_dict(chillid)
+    inviteeList = database.get_invitees(chillid)
+    finalplan = [finalplanDict['title'], inviteeList, finalPlanDict['location'], finalPlanDict['date'], finalPlanDict['time']]
     imgurl = "https://www.google.com/maps/embed/v1/place?q="+finalplan[3]+"&key=AIzaSyBun2m9jaQTFGb0qtR7Shh7inqFhzKbLL4"
     if request.method=='GET':
         return render_template('summary.html', finalplan=finalplan, imgurl=imgurl, origin=None)
