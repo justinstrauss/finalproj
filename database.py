@@ -82,15 +82,20 @@ def get_invite_food_preferences(invite_id):
         masterlist.append(masterdict[key])
     return masterlist
 
-def get_location_preferences(invite_id):
+def get_invite_preferences(invite_id):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
-    masterlist = []
-    for row in c.execute("select location_pref from userinvitematch where invite_id=='"+ invite_id +"'"):
-        masterlist.append(row[0])
+    masterdict = {}
+    masterdict['location'] = []
+    masterdict['time'] = []
+    masterdict['date'] = []
+    for row in c.execute("select location_pref, date_pref, time_pref from userinvitematch where invite_id=='"+ invite_id +"'"):
+        masterdict['location'].append(row[0])
+        masterdict['time'].append(row[2])
+        masterdict['date'].append(row[1])
     conn.commit()
     conn.close()
-    return masterlist
+    return masterdict
 
 def get_invitees(invite_id):
     conn = sqlite3.connect("database.db")
@@ -104,7 +109,7 @@ def get_invitees(invite_id):
 
 #returns true if everyone responded
 def see_if_everyone_responded(invite_id):
-    listToScan = get_location_preferences(invite_id)
+    listToScan = get_invite_preferences(invite_id)['location']
     for item in listToScan:
         if item == "None":
             return False
@@ -245,4 +250,3 @@ def test():
     #print(cursor.fetchall())
     cursor.execute("SELECT * FROM inviteprefmatch")
     #print(cursor.fetchall())
-#test()
