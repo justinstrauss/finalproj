@@ -27,7 +27,7 @@ facebook = oauth.remote_app('facebook',
     authorize_url='https://www.facebook.com/dialog/oauth',
     consumer_key=FACEBOOK_APP_ID,
     consumer_secret=FACEBOOK_APP_SECRET,
-    request_token_params={'scope': 'user_friends'}
+    request_token_params={'scope': 'user_friends, email'}
 )
 
 def login_required(f):
@@ -147,6 +147,7 @@ def create():
     else:
         title = request.form['title']
         who = request.form['who']
+        wholist = [str(x) for x in who[:-2].split(',')]
         what = request.form['what']
         preflist = [str(x) for x in what[:-2].split(',')]
         where = request.form['where']
@@ -155,7 +156,7 @@ def create():
         # print where
         date = request.form['date']
         thetime = request.form['thetime']
-        friendlist = [frienddict[x.strip()] for x in friends]
+        friendlist = [frienddict[x.strip()] for x in wholist]
         database.add_invite(title, session['id'], friendlist, preflist, where, thetime, date) 
         return redirect(url_for('index'))
 
