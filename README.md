@@ -62,4 +62,4 @@ Once everyone invited to a Chill has completed their response form, our applicat
 - [X] 1/24: layout summary form (Justin)
 - [X] 1/25: complete front page integration (Justin)
 - [X] 1/26: finalize database methods (Dennis)
-- [ ] 1/27: make demo video and deploy on Digital Ocean (Justin)
+- [X] 1/27: make demo video and deploy on Digital Ocean (Justin)
