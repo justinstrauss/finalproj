@@ -240,8 +240,8 @@ def get_invites_for_user(facebook_id):
 
 def test():
     #create_db()
-    #add_invite("Test Chill", "Dennis", ["Lev", "Justin"],["Tacos", "Pizza"], "NYC", "11:00am", "12/13/15")
-    print get_invites_for_user("Dennis")
+    #add_invite("Test Chill", "100001767295555", ["100000550963490"],["Tacos", "Pizza"], "NYC", "11:00am", "12/13/15")
+    #print get_invites_for_user("100000550963490")['pending']['Test Chill']
     con = sqlite3.connect('database.db')
     cursor = con.cursor()
     cursor.execute("SELECT * FROM invites")
