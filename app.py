@@ -15,10 +15,6 @@ import facebook
 FACEBOOK_APP_ID = "935483263159079"
 FACEBOOK_APP_SECRET = "ce39cb172d25891be741905badf002e9"
 
-##FACEBOOK GRAPH API: use these if running on localhost
-#FACEBOOK_APP_ID = '188477911223606'
-#FACEBOOK_APP_SECRET = '621413ddea2bcc5b2e83d42fc40495de'
-
 app = Flask(__name__)
 app.secret_key = "don't store this on github"
 app.debug = True
@@ -76,7 +72,13 @@ def facebook_authorized(resp):
     session['token'] = resp['access_token']
     me = facebook.get('/me')
     session['name'] = me.data['name']
-    session['id'] = me.data['id']
+    fburl = "https://graph.facebook.com/v2.2/me?access_token=" + urllib.quote_plus(str((session["token"])))
+    req = urllib2.urlopen(fburl)
+    result = req.read()
+    d = json.loads(result)
+    # a = open('sample.json').read()
+    # d = json.loads(a)
+    session['id'] = d['id']
     if not database.user_exists(session['id']):
         database.add_user(session['name'],session['id'])
         flash("Since you are a new user, please update your food preferences.")
@@ -120,11 +122,11 @@ def create():
     # d = json.loads(a)
     friendslist = d['data']
     if friendslist == []:
-        friends = ["Justin Strauss","Lev Akabas","Dennis Nenov"]
-        friendids = ["100001767295555","100001958141644","100000550963490"]
+        friends = []
+        friendids = []
     else:
         friends = [str(x["name"]) for x in friendslist]
-        friendids = [str(x["id"]) for x in friendslist]
+        friendids = [str(x["email"]) for x in friendslist]
     frienddict = []
     for x in range(0,len(friends)):
         frienddict.append((friends[x],friendids[x]))
