@@ -62,7 +62,7 @@ def add_invite(title, creator_id, list_of_friends, list_of_preferences, location
     invite_friends(str(newInviteID),list_of_friends)
     add_user_preferences(str(newInviteID), creator_id, location, time, date, list_of_preferences)
 
-def get_food_preferences_dict(invite_id):
+def get_invite_food_preferences_dict(invite_id):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     masterdict = {}
@@ -71,10 +71,12 @@ def get_food_preferences_dict(invite_id):
             masterdict[row[0]].append(row[1])
         else:
             masterdict[row[0]] = [row[1]]
+    conn.commit()
+    conn.close()
     return masterdict
 
-def get_food_preferences(invite_id):
-    masterdict = get_food_preferences_dict(invite_id)
+def get_invite_food_preferences(invite_id):
+    masterdict = get_invite_food_preferences_dict(invite_id)
     masterlist = []
     for key in masterdict.keys():
         masterlist.append(masterdict[key])
@@ -86,6 +88,8 @@ def get_location_preferences(invite_id):
     masterlist = []
     for row in c.execute("select location_pref from userinvitematch where invite_id=='"+ invite_id +"'"):
         masterlist.append(row[0])
+    conn.commit()
+    conn.close()
     return masterlist
 
 def get_invitees(invite_id):
@@ -94,13 +98,23 @@ def get_invitees(invite_id):
     masterlist = []
     for row in c.execute("select facebook_id from userinvitematch where invite_id=='"+ invite_id +"'"):
         masterlist.append(row[0])
+    conn.commit()
+    conn.close()
     return masterlist
 
 #returns true if everyone responded
 def see_if_everyone_responded(invite_id):
     listToScan = get_location_preferences(invite_id)
-    for element in listToScan:
-        if element == "None":
+    for item in listToScan:
+        if item == "None":
+            return False
+    return True
+
+#returns true if the invite is finalized--i.e. the owner picked a location
+def see_if_finalized(invite_id):
+    dictToScan = get_invite_dict(invite_id)
+    for key in dictToScan.keys():
+        if dictToScan[key] == "None":
             return False
     return True
 
@@ -114,12 +128,115 @@ def get_invite_dict(invite_id):
         masterdict['location'] = row[2]
         masterdict['time'] = row[3]
         masterdict['date'] = row[4]
+    conn.commit()
+    conn.close()
+    return masterdict
+
+def get_invite_title(invite_id):
+    return get_invite_dict(invite_id)['title']
+                            
+def set_final_plan(invite_id, location, time, date):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    command = "update invites set final_location='"+ location + "', final_time='" + time + "', final_date='" + date + "' where invite_id=='" + invite_id +"'"
+    c.execute(command)
+    conn.commit()
+    conn.close()
+
+def get_user_name(facebook_id):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    for row in c.execute("select name from users where facebook_id=='"+ facebook_id +"'"):
+        return row[0]
+
+def get_host_id(invite_id):
+    return get_invite_dict(invite_id)['creator_id']
+
+def get_host_name(invite_id):
+    return get_user_name(get_host_id(invite_id))
+
+def get_host_food_preferences(invite_id):
+    return get_invite_food_preferences_dict(invite_id)[get_host_id(invite_id)]
+
+def get_host_preferences(invite_id):
+    host_id = get_host_id(invite_id)
+    masterdict = {}
+    masterdict['food'] = get_host_food_preferences(invite_id)
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    for row in c.execute("select location_pref, time_pref, date_pref from userinvitematch where invite_id=='" + invite_id +"' and facebook_id=='" + host_id + "'"):
+        masterdict['location'] = row[0]
+        masterdict['time'] = row[1]
+        masterdict['date'] = row[2]
+    conn.commit()
+    conn.close()
+    return masterdict
+
+def get_user_food_preferences(facebook_id):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    masterlist = []
+    for row in c.execute("select preference from userprefmatch where facebook_id=='" + facebook_id + "'"):
+        masterlist.append(row[0])
+    conn.commit()
+    conn.close()
+    return masterlist
+
+def update_user_food_preferences(facebook_id, list_of_preferences):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("delete from userprefmatch where facebook_id=='" + facebook_id + "'")    
+    for foodPref in list_of_preferences:
+        command = "INSERT INTO userprefmatch(facebook_id, preference) VALUES('" + str(facebook_id) + "','" + str(foodPref) + "')"
+        c.execute(command)
+    conn.commit()
+    conn.close()
+
+#returns true if the user exists
+def user_exists(facebook_id):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    command = "SELECT COUNT(*) FROM users where facebook_id=='" + facebook_id + "'"
+    for row in c.execute(command):
+        count = row[0]
+    conn.commit()
+    conn.close()
+    return count > 0
+    
+
+def add_user(name, facebook_id):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    command = "INSERT INTO users(facebook_id, name) VALUES('" + str(facebook_id) + "','" + str(name) + "')"
+    c.execute(command)
+    conn.commit()
+    conn.close()
+
+def get_invites_for_user(facebook_id):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    masterdict = {}
+    masterdict['pending'] = {}
+    masterdict['ready'] = {}
+    masterdict['needsapproval'] = {}
+    for row in c.execute("select invite_id from userinvitematch where facebook_id=='" + facebook_id + "'"):
+        invite_title = get_invite_title(row[0])
+        invite_id = row[0]
+        package = [invite_id, invite_title]
+        if (see_if_finalized(invite_id)):
+            masterdict['ready'][invite_title] = invite_id
+        elif (see_if_everyone_responded(invite_id)):
+            masterdict['needsapproval'][invite_title] = invite_id
+        else:
+            masterdict['pending'][invite_title] = invite_id
+    conn.commit()
+    conn.close()
     return masterdict
 
 def test():
     #create_db()
     #add_invite("Test Chill", "Dennis", ["Lev", "Justin"],["Tacos", "Pizza"], "NYC", "11:00am", "12/13/15")
-    print get_invite_dict("4dff4ea340f0a823f15d3f4f01ab62eae0e5da579ccb851f8db9dfe84c58b2b37b89903a740e1ee172da793a6e79d560e5f7f9bd058a12a280433ed6fa46510a")
+    print get_invites_for_user("Dennis")
     con = sqlite3.connect('database.db')
     cursor = con.cursor()
     cursor.execute("SELECT * FROM invites")
@@ -128,49 +245,4 @@ def test():
     #print(cursor.fetchall())
     cursor.execute("SELECT * FROM inviteprefmatch")
     #print(cursor.fetchall())
-
-test()
-
-##def add_post(title, content, author, database_id):
-##    conn = sqlite3.connect("database.db")
-##    c = conn.cursor()
-##    currentMax = c.execute("select max(post_id) from post").fetchone()
-##    if currentMax[0] == None:
-##        newid = 1
-##    else:
-##       newid = int(currentMax[0]) + 1
-##    command = "INSERT INTO post(title, content, author, database_id, post_id) VALUES('" + title + "','" + content + "','" + author + "','" + str(database_id) + "','" + str(newid) +  "')"
-##    c.execute(command)
-##    conn.commit()
-##    conn.close()
-##    
-##def database_list():
-##    conn = sqlite3.connect("database.db")
-##    c = conn.cursor()
-##    databases = []
-##    for row in c.execute("select name, database_id from database"):
-##        databases.append([row[0],row[1]])
-##    return databases
-##
-##def post_list(databaseid):
-##    conn = sqlite3.connect("database.db")
-##    c = conn.cursor()
-##    posts = []
-##    for row in c.execute("select title,  author, post_id from post where database_id==" + str(databaseid)):
-##        posts.append([row[0],row[1],row[2]])
-##    return posts
-##
-##def get_post(postid, databaseid):
-##    conn = sqlite3.connect("database.db")
-##    c = conn.cursor()
-##    post_dict = {}
-##    command = """
-##    SELECT title, content, author
-##    FROM post
-##    WHERE database_id==""" + str(databaseid) + """ and post_id==""" + str(postid)
-##    for post in c.execute(command):
-##        post_dict['title'] = post[0]
-##        post_dict['author'] = post[2]
-##        post_dict['content'] = post[1]
-##    return post_dict
-
+#test()
