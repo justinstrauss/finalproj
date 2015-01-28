@@ -128,7 +128,7 @@ def create():
         friendids = []
     else:
         friends = [str(x["name"]) for x in friendslist]
-        friendids = [str(x["email"]) for x in friendslist]
+        friendids = [str(x["id"]) for x in friendslist]
     frienddict = []
     for x in range(0,len(friends)):
         frienddict.append((friends[x],friendids[x]))
