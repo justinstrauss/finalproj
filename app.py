@@ -133,11 +133,10 @@ def create():
         return render_template("create.html", friends=friends, foodlist=foodlist, food=foodstr)
     else:
         title = request.form['title']
-        ### fix this--you need a list of IDs###
         who = request.form['who']
-        friendlist= []
+        friendlist= [str(x) for x in who[:-2].split(',')]
         what = request.form['what']
-        preflist = [str(x) for x in preferences[:-2].split(',')]
+        preflist = [str(x) for x in what[:-2].split(',')]
         where = request.form['where']
         if where[-7:].isdigit():
             where = urllib.unquote(reverse_geo(where)).decode('utf8').replace("+"," ")

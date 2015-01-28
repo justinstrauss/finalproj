@@ -245,5 +245,4 @@ def test():
     #print(cursor.fetchall())
     cursor.execute("SELECT * FROM inviteprefmatch")
     #print(cursor.fetchall())
-
-test()
+#test()
